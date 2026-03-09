@@ -1,0 +1,8 @@
+{
+    "tailwindCSS.includeLanguages": {
+        "latte": "html"
+    },
+    "files.associations": {
+        "*.css": "tailwindcss"
+      }
+}
