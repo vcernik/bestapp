@@ -3,3 +3,4 @@ temp/cache/*
 log/*
 node_modules/*
 www/assets/*
+config/local.neon

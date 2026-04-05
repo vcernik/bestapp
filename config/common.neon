@@ -3,6 +3,11 @@
 parameters:
 
 
+extensions:
+	nextras.dbal: Nextras\Dbal\Bridges\NetteDI\DbalExtension
+	nextras.orm: Nextras\Orm\Bridges\NetteDI\OrmExtension
+
+
 application:
 	errorPresenter:
 		4xx: Error:Error4xx
@@ -11,9 +16,22 @@ application:
 
 
 database:
-	dsn: 'sqlite::memory:'
-	user:
-	password:
+	dsn: 'mysql:host=%db.host%;port=%db.port%;dbname=%db.name%'
+	user: %db.user%
+	password: %db.password%
+
+
+nextras.dbal:
+	driver: mysqli
+	host: %db.host%
+	port: %db.port%
+	database: %db.name%
+	username: %db.user%
+	password: %db.password%
+
+
+nextras.orm:
+	model: App\Model\Orm\Orm
 
 
 latte:

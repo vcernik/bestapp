@@ -1,2 +1,26 @@
 {block content}
-<h1 class="text-4xl font-bold underline">Hello worlds!</h1>
+<main class="mx-auto max-w-4xl px-4 py-10">
+	<h1 class="mb-6 text-3xl font-bold">Nextras ORM demo: Articles</h1>
+
+	<div class="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
+		<table class="w-full table-auto text-left">
+			<thead class="bg-slate-100 text-sm text-slate-700">
+				<tr>
+					<th class="px-4 py-3 font-semibold">ID</th>
+					<th class="px-4 py-3 font-semibold">Title</th>
+					<th class="px-4 py-3 font-semibold">Created</th>
+				</tr>
+			</thead>
+			<tbody class="divide-y divide-slate-100 text-sm">
+				<tr n:foreach="$articles as $article" class="hover:bg-slate-50">
+					<td class="px-4 py-3 text-slate-500">{$article->id}</td>
+					<td class="px-4 py-3 font-medium text-slate-900">{$article->title}</td>
+					<td class="px-4 py-3 text-slate-600">{$article->createdAt|date:'j. n. Y H:i'}</td>
+				</tr>
+				<tr n:if="!$articles">
+					<td colspan="3" class="px-4 py-6 text-center text-slate-500">No records found. Run migrations and seed data.</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</main>

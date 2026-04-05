@@ -1,0 +1,7 @@
+parameters:
+	db:
+		host: db
+		port: 3306
+		name: db
+		user: db
+		password: db

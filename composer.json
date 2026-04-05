@@ -19,7 +19,10 @@
 		"nette/security": "^3.2",
 		"nette/utils": "^4.0",
 		"latte/latte": "^3.1",
-		"tracy/tracy": "^2.10"
+		"tracy/tracy": "^2.10",
+		"nextras/orm": "^5.0",
+		"nextras/dbal": "^5.0",
+		"nextras/migrations": "^3.5"
 	},
 	"require-dev": {
 		"nette/tester": "^2.5",
