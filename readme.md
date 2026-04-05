@@ -1,15 +1,16 @@
-Asset Building with Vite
-------------------------
+Tato aplikace je skeleton a jako testovací prostředí pro kombinaci webových technologií - DDEV, Nette, Vite, Tailwind, PHPstan
 
-This project supports Vite for asset building, which is recommended but optional. To activate Vite:
 
-1. Uncomment the `type: vite` line in the `common.neon` configuration file under the assets mapping section.
-2. Then set up and build the assets:
-
-		npm install
-		npm run build
-
+# DDEV
+`ddev start`  
+`ddev describe`  
 
 Adminer: https://bestapp.ddev.site:9101/
 
-PHPstan: composer phpstan app --level 4
+PHPstan: `ddev composer phpstan app --level 4`
+
+
+# Vite - assets build
+`ddev npm install`  
+`ddev npm run build`  
+
