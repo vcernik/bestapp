@@ -1,0 +1,12 @@
+{
+  "servers": {
+    "nette-inspector": {
+      "type": "stdio",
+      "command": "ddev",
+      "args": [
+		"php",
+		"vendor/nette/mcp-inspector/bin/mcp-inspector"
+	]
+    }
+  }
+}

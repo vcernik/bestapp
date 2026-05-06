@@ -1,5 +1,6 @@
 vendor/*
 temp/cache/*
+temp/mcp-inspector/*
 log/*
 node_modules/*
 www/assets/*

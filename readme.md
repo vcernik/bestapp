@@ -1,4 +1,4 @@
-Tato aplikace je skeleton a jako testovací prostředí pro kombinaci webových technologií - DDEV, Nette, Vite, Tailwind, PHPstan
+Tato aplikace je skeleton modulární webové aplikace využívající kombinaci webových technologií - DDEV, Nette, Vite, Tailwind, PHPstan.
 
 
 # DDEV
@@ -14,13 +14,7 @@ PHPstan: `ddev composer phpstan app --level 4`
 `ddev npm install`  
 `ddev npm run build`  
 
-
 # Nextras ORM + migrace
-Instalované balíčky:
-- `nextras/orm`
-- `nextras/dbal`
-- `nextras/migrations`
-
 Šablona lokální konfigurace je v `config/local.example.neon`.
 Lokální DB přístupy patří do `config/local.neon` (soubor je v `.gitignore`, tedy neverzovaný).
 
