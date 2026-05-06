@@ -22,7 +22,8 @@
 		"tracy/tracy": "^2.10",
 		"nextras/orm": "^5.0",
 		"nextras/dbal": "^5.0",
-		"nextras/migrations": "^3.5"
+		"nextras/migrations": "^3.5",
+		"ublaboo/datagrid": "^7.2"
 	},
 	"require-dev": {
 		"nette/tester": "^2.5",

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Presentation\Home;
+namespace App\Presentation\Front\Home;
 
 use App\Model\Orm\Article\ArticleRepository;
 use Nette;
