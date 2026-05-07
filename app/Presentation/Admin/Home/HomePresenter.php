@@ -3,6 +3,8 @@
 namespace App\Presentation\Admin\Home;
 
 use App\Model\Orm\Article\ArticleRepository;
+use App\Presentation\Admin\Accessory\AdminMenuProvider;
+use App\Presentation\Admin\Accessory\DatagridFactory;
 use Contributte\Datagrid\Datagrid;
 use Nette;
 
@@ -10,7 +12,9 @@ use Nette;
 final class HomePresenter extends Nette\Application\UI\Presenter
 {
 	public function __construct(
+		private readonly AdminMenuProvider $adminMenuProvider,
 		private readonly ArticleRepository $articleRepository,
+		private readonly DatagridFactory $datagridFactory,
 	)
 	{
 		parent::__construct();
@@ -18,7 +22,7 @@ final class HomePresenter extends Nette\Application\UI\Presenter
 
 	protected function createComponentArticlesGrid(): Datagrid
 	{
-		$grid = new Datagrid;
+		$grid = $this->datagridFactory->create();
 
 		$grid->setDataSource($this->articleRepository->findLatest());
 		$grid->setDefaultSort(['createdAt' => 'DESC']);
@@ -40,5 +44,11 @@ final class HomePresenter extends Nette\Application\UI\Presenter
 
 	public function renderDefault(): void
 	{
+	}
+
+	protected function beforeRender(): void
+	{
+		parent::beforeRender();
+		$this->template->adminMenuItems = $this->adminMenuProvider->getItems();
 	}
 }

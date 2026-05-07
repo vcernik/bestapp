@@ -1,0 +1,30 @@
+parameters:
+    admin:
+        menu:
+            - name: Přehled
+              link: Home:default
+            - name: Reporty
+              link:
+                  destination: Home:default
+                  params:
+                      section: reports
+            - name: Články
+              link:
+                  destination: Home:default
+                  params:
+                      section: articles
+            - name: Kategorie
+              link:
+                  destination: Home:default
+                  params:
+                      section: categories
+            - name: Uživatelé
+              link:
+                  destination: Home:default
+                  params:
+                      section: users
+            - name: Nastavení
+              link:
+                  destination: Home:default
+                  params:
+                      section: settings

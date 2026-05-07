@@ -1,5 +1,6 @@
 services:
 	- App\Core\RouterFactory::createRouter
+	- App\Presentation\Admin\Accessory\AdminMenuProvider(%admin.menu%)
 
 
 search:
