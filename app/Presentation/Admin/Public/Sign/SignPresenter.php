@@ -4,8 +4,8 @@ namespace App\Presentation\Admin\Public\Sign;
 
 use App\Core\Security\AdminActivityLogger;
 use App\Presentation\Admin\Accessory\AdminMenuProvider;
+use App\Presentation\Admin\Accessory\BootstrapFormFactory;
 use App\Presentation\Admin\Public\Accessory\BasePublicPresenter;
-use App\Presentation\Admin\Public\Accessory\SignFormFactory;
 use Nette;
 use Nette\Application\UI\Form;
 
@@ -13,7 +13,7 @@ final class SignPresenter extends BasePublicPresenter
 {
 	public function __construct(
 		AdminMenuProvider $adminMenuProvider,
-		private readonly SignFormFactory $signFormFactory,
+		private readonly BootstrapFormFactory $bootstrapFormFactory,
 		private readonly AdminActivityLogger $adminActivityLogger,
 	)
 	{
@@ -22,9 +22,21 @@ final class SignPresenter extends BasePublicPresenter
 
 	protected function createComponentSignInForm(): Form
 	{
-		return $this->signFormFactory->create(function (\stdClass $values): void {
+		$form = $this->bootstrapFormFactory->create();
+		$form->addText('username', 'Uživatelské jméno')
+			->setRequired('Zadejte uživatelské jméno.');
+
+		$form->addPassword('password', 'Heslo')
+			->setRequired('Zadejte heslo.');
+
+		$form->addCheckbox('remember', 'Zapamatovat si mě');
+		$form->addSubmit('send', 'Přihlásit se');
+
+		$form->onSuccess[] = function (Form $form, \stdClass $values): void {
 			$this->signIn($values);
-		});
+		};
+
+		return $form;
 	}
 
 	public function actionOut(): void
@@ -44,11 +56,13 @@ final class SignPresenter extends BasePublicPresenter
 	{
 		try {
 			$this->getUser()->login($values->username, $values->password);
-			$this->getUser()->setExpiration($values->remember ? '14 days' : '3 hours', true);
+			$expiration = $values->remember ? '3 hours' : '3 hours'; // Nastavíme maximální dobu na 3 hodiny
+			$this->getUser()->setExpiration($expiration, true);
 			$this->flashMessage('Přihlášení proběhlo úspěšně.', 'success');
 			$this->redirect(':Admin:Home:default');
 		} catch (Nette\Security\AuthenticationException $exception) {
-			$this['signInForm']->addError($exception->getMessage());
+			$this['signInForm']['username']->addError('Zkontrolujte své uživatelské jméno nebo heslo.');
+			$this['signInForm']['password']->addError('Zkontrolujte své uživatelské jméno nebo heslo.');
 		}
 	}
 }
