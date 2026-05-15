@@ -16,6 +16,10 @@ final class BootstrapFormFactory
 			self::$initialized = true;
 		}
 
-		return new BootstrapForm;
+		$form = new BootstrapForm;
+		$form->setAutoShowValidation(false);
+		$form->setShowValidation(false);
+
+		return $form;
 	}
 }

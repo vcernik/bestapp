@@ -27,7 +27,7 @@ final class ProfilePresenter extends BasePrivatePresenter
 
 		$form->addPassword('newPassword', 'Nové heslo')
 			->setRequired('Zadejte nové heslo.')
-			->addRule($form::MinLength, 'Nové heslo musí mít alespoň %d znaků.', 12);
+			->addRule($form::MinLength, 'Nové heslo musí mít alespoň %d znaků.', 10);
 
 		$form->addPassword('newPasswordVerify', 'Potvrzení nového hesla')
 			->setRequired('Potvrďte nové heslo.')

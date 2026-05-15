@@ -61,8 +61,7 @@ final class SignPresenter extends BasePublicPresenter
 			$this->flashMessage('Přihlášení proběhlo úspěšně.', 'success');
 			$this->redirect(':Admin:Home:default');
 		} catch (Nette\Security\AuthenticationException $exception) {
-			$this['signInForm']['username']->addError('Zkontrolujte své uživatelské jméno nebo heslo.');
-			$this['signInForm']['password']->addError('Zkontrolujte své uživatelské jméno nebo heslo.');
+			$this['signInForm']->addError('Zkontrolujte své uživatelské jméno nebo heslo.');
 		}
 	}
 }
