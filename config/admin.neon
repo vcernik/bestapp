@@ -1,5 +1,6 @@
 parameters:
     admin:
+        appName: Bestapp Admin
         menu:
             - name: Přehled
               link: Home:default

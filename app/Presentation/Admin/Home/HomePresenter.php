@@ -50,5 +50,6 @@ final class HomePresenter extends Nette\Application\UI\Presenter
 	{
 		parent::beforeRender();
 		$this->template->adminMenuItems = $this->adminMenuProvider->getItems();
+		$this->template->appName = $this->adminMenuProvider->getAppName();
 	}
 }

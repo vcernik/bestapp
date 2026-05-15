@@ -11,11 +11,14 @@ final class AdminMenuProvider
 	 */
 	private array $items;
 
+	private readonly string $appName;
+
 	/**
 	 * @param array<int, array{name?: mixed, link?: mixed}> $items
 	 */
-	public function __construct(array $items)
+	public function __construct(string $appName, array $items)
 	{
+		$this->appName = $appName;
 		$this->items = array_map(
 			fn (array $item): array => $this->normalizeItem($item),
 			$items,
@@ -25,6 +28,11 @@ final class AdminMenuProvider
 	/**
 	 * @return list<array{name: string, destination: string, params: array<string, scalar|null>}>
 	 */
+	public function getAppName(): string
+	{
+		return $this->appName;
+	}
+
 	public function getItems(): array
 	{
 		return $this->items;

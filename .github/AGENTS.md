@@ -46,14 +46,15 @@ ddev npm run build          # produkce
 ddev npm run dev            # dev server (HMR na https://bestapp.ddev.site:5173)
 
 # Migrace
-ddev exec php bin/migrations.php structures basic-data          # produkce
-ddev exec php bin/migrations.php structures basic-data dummy-data          # vývoj
-ddev exec php bin/migrations.php structures basic-data dummy-data --reset  # reset DB
+ddev php bin/migrations.php structures basic-data          # produkce
+ddev php bin/migrations.php structures basic-data dummy-data          # vývoj
+ddev php bin/migrations.php structures basic-data dummy-data --reset  # reset DB
 
 # Statická analýza
 ddev composer phpstan app --level 4
 
 # Testy
+ddev php vendor/bin/tester tests -s
 ddev composer tester
 ```
 
@@ -65,5 +66,6 @@ ddev composer tester
 - Latte šablony mají `strictParsing: yes`
 - Nette Assets: Vite mapping s dev serverem, tag `{asset}`
 - Composer příkazy vždy spouštět přes DDEV (`ddev composer ...`), ne přímo `composer ...`
+- PHP skripty vždy spouštět přes DDEV (`ddev php ...`), ne přímo `php ...`
 - Modul `Admin` používá Bootstrap 5 (včetně UI komponent) a nepoužívá Tailwind CSS
 - Pro modul `Admin` používat samostatný Vite entrypoint `assets/admin.js` a v admin layoutu includovat `{asset 'admin.js'}` kvůli HMR/full reload
