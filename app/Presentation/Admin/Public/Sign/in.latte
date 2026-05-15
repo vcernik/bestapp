@@ -9,10 +9,6 @@
 		<div n:foreach="$flashes as $flash" class="alert alert-{$flash->type} mb-3" role="alert">{$flash->message}</div>
 
 		{control signInForm}
-
-		<div class="mt-3 text-end">
-			<a n:href=":Admin:Public:ForgotPassword:request" class="small text-decoration-none">Zapomenuté heslo?</a>
-		</div>
 	</div>
 </section>
 {/block}

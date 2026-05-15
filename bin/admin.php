@@ -3,6 +3,7 @@
 use App\Bootstrap;
 use App\Core\Command\CleanupAdminActivityLogCommand;
 use App\Core\Command\CreateAdminUserCommand;
+use App\Core\Command\SetAdminUserPasswordCommand;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -13,7 +14,7 @@ array_shift($args);
 $command = $args[0] ?? null;
 
 if ($command === null) {
-	fwrite(STDERR, "Missing command. Available: admin:user:create, admin:activity-log:cleanup\n");
+	fwrite(STDERR, "Missing command. Available: admin:user:create, admin:user:set-password, admin:activity-log:cleanup\n");
 	exit(1);
 }
 
@@ -77,6 +78,26 @@ try {
 			fwrite(STDOUT, 'Created at: ' . $user->createdAt->format('Y-m-d H:i:s') . "\n");
 			exit(0);
 
+			case 'admin:user:set-password':
+				/** @var SetAdminUserPasswordCommand $setPasswordCommand */
+				$setPasswordCommand = $container->getByType(SetAdminUserPasswordCommand::class);
+				$username = (string) ($options['username'] ?? $readline('Username: '));
+				$password = (string) ($options['password'] ?? $readHidden('New password: '));
+				if (!isset($options['password'])) {
+					$confirm = $readHidden('Confirm new password: ');
+					if ($password !== $confirm) {
+						fwrite(STDERR, "Passwords do not match.\n");
+						exit(1);
+					}
+				}
+
+				$user = $setPasswordCommand->execute($username, $password);
+				fwrite(STDOUT, "[OK] Password updated\n");
+				fwrite(STDOUT, 'ID: ' . $user->id . "\n");
+				fwrite(STDOUT, 'Username: ' . $user->username . "\n");
+				fwrite(STDOUT, 'Name: ' . $user->name . "\n");
+				exit(0);
+
 		case 'admin:activity-log:cleanup':
 			/** @var CleanupAdminActivityLogCommand $cleanupCommand */
 			$cleanupCommand = $container->getByType(CleanupAdminActivityLogCommand::class);
@@ -87,6 +108,7 @@ try {
 
 		default:
 			fwrite(STDERR, "Unknown command: {$command}\n");
+			fwrite(STDERR, "Available: admin:user:create, admin:user:set-password, admin:activity-log:cleanup\n");
 			exit(1);
 	}
 } catch (Throwable $exception) {

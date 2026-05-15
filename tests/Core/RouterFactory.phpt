@@ -28,16 +28,6 @@ test('admin sign route matches public sign presenter', function (): void {
 });
 
 
-test('admin forgot-password route matches public presenter', function (): void {
-	$router = RouterFactory::createRouter();
-	$request = new Request(new UrlScript('http://localhost/admin/forgot-password/request', '/'));
-	$params = $router->match($request);
-
-	Assert::same('Admin:Public:ForgotPassword', $params['presenter'] ?? null);
-	Assert::same('request', $params['action'] ?? null);
-});
-
-
 test('front route matches presenter action and id', function (): void {
 	$router = RouterFactory::createRouter();
 	$request = new Request(new UrlScript('http://localhost/article/detail/10', '/'));
