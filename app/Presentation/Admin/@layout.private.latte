@@ -47,7 +47,7 @@
 						</ol>
 					</nav>
 					{/block}
-					<div class="mb-3">
+					<div class="my-3">
 						<div n:foreach="$flashes as $flash" class="alert alert-{$flash->type ?: 'info'} mb-2" role="alert">{$flash->message}</div>
 					</div>
 					{include content}
