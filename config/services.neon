@@ -9,3 +9,7 @@ search:
 			- *Facade
 			- *Factory
 			- *Service
+			- *Manager
+			- *Authenticator
+			- *Logger
+			- *Command

@@ -14,8 +14,11 @@ final class RouterFactory
 	{
 		$router = new RouteList;
 
-		$router->withModule('Admin')
-			->addRoute('admin[/<presenter>[/<action>[/<id>]]]', 'Home:default');
+		$adminRouter = $router->withModule('Admin');
+		$adminRouter->addRoute('admin/sign[/<action>]', 'Public:Sign:in');
+		$adminRouter->addRoute('admin/forgot-password[/<action>]', 'Public:ForgotPassword:request');
+		$adminRouter->addRoute('admin/<presenter>/<action>[/<id>]', 'Home:default');
+		$adminRouter->addRoute('admin', 'Home:default');
 
 		$router->withModule('Front')
 			->addRoute('<presenter>/<action>[/<id>]', 'Home:default');

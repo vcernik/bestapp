@@ -46,3 +46,10 @@ Spuštění migrací (vývoj s demo daty):
 Reset DB a kompletní znovunahrání:
 `ddev php bin/migrations.php structures basic-data dummy-data --reset`
 
+
+
+# Admin
+Create new user: `ddev php bin/admin.php admin:user:create`
+
+Neinteraktivně lze použít parametry:
+`ddev php bin/admin.php admin:user:create --username=admin --name="Admin User" --password="very-strong-password"`

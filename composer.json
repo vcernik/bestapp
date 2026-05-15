@@ -23,7 +23,8 @@
 		"nextras/orm": "^5.0",
 		"nextras/dbal": "^5.0",
 		"nextras/migrations": "^3.5",
-		"ublaboo/datagrid": "^7.2"
+		"ublaboo/datagrid": "^7.2",
+		"contributte/forms-bootstrap": "^0.8.7"
 	},
 	"require-dev": {
 		"nette/tester": "^2.5",

@@ -3,21 +3,21 @@
 namespace App\Presentation\Admin\Home;
 
 use App\Model\Orm\Article\ArticleRepository;
+use App\Presentation\Admin\Accessory\BasePrivatePresenter;
 use App\Presentation\Admin\Accessory\AdminMenuProvider;
 use App\Presentation\Admin\Accessory\DatagridFactory;
 use Contributte\Datagrid\Datagrid;
-use Nette;
 
 
-final class HomePresenter extends Nette\Application\UI\Presenter
+final class HomePresenter extends BasePrivatePresenter
 {
 	public function __construct(
-		private readonly AdminMenuProvider $adminMenuProvider,
+		AdminMenuProvider $adminMenuProvider,
 		private readonly ArticleRepository $articleRepository,
 		private readonly DatagridFactory $datagridFactory,
 	)
 	{
-		parent::__construct();
+		parent::__construct($adminMenuProvider);
 	}
 
 	protected function createComponentArticlesGrid(): Datagrid
@@ -46,10 +46,4 @@ final class HomePresenter extends Nette\Application\UI\Presenter
 	{
 	}
 
-	protected function beforeRender(): void
-	{
-		parent::beforeRender();
-		$this->template->adminMenuItems = $this->adminMenuProvider->getItems();
-		$this->template->appName = $this->adminMenuProvider->getAppName();
-	}
 }
