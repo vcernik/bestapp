@@ -43,7 +43,13 @@
 					{block breadcrumbs}
 					<nav aria-label="breadcrumb" class="mb-3">
 						<ol class="breadcrumb mb-0 small">
-							<li class="breadcrumb-item active" aria-current="page">Administrace</li>
+							<li n:foreach="$breadcrumbs as $item" class="breadcrumb-item {if $item['link'] === null}active{/if}" aria-current="{if $item['link'] === null}page{/if}">
+								{if $item['link'] !== null}
+									<a n:href="$item['link']" class="text-decoration-none">{$item['title']}</a>
+								{else}
+									{$item['title']}
+								{/if}
+							</li>
 						</ol>
 					</nav>
 					{/block}

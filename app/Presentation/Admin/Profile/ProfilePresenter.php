@@ -54,4 +54,10 @@ final class ProfilePresenter extends BasePrivatePresenter
 
 		return $form;
 	}
+
+	protected function startup(): void
+	{
+		parent::startup();
+		$this->addBreadcrumb('Profil');
+	}
 }

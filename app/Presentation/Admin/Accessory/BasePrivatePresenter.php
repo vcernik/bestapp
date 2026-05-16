@@ -7,6 +7,11 @@ use Nette;
 
 abstract class BasePrivatePresenter extends Nette\Application\UI\Presenter
 {
+	/**
+	 * @var list<array{title: string, link: string|null}>
+	 */
+	protected array $breadcrumbs = [];
+
 	public function __construct(
 		private readonly AdminMenuProvider $adminMenuProvider,
 	)
@@ -28,6 +33,9 @@ abstract class BasePrivatePresenter extends Nette\Application\UI\Presenter
 			$this->flashMessage('Relace vypršela nebo nejste přihlášen. Přihlaste se prosím znovu.', 'info');
 			$this->redirect(':Admin:Public:Sign:in');
 		}
+
+		$this->breadcrumbs = [];
+		$this->addBreadcrumb('Administrace', 'Home:default');
 	}
 
 	protected function beforeRender(): void
@@ -36,6 +44,18 @@ abstract class BasePrivatePresenter extends Nette\Application\UI\Presenter
 		$this->template->currentUser = $this->getUser()->getIdentity();
 		$this->template->adminMenuItems = $this->adminMenuProvider->getItems();
 		$this->template->appName = $this->adminMenuProvider->getAppName();
+		$this->template->breadcrumbs = $this->breadcrumbs;
+	}
+
+	/**
+	 * Přidá breadcrumb položku do seznamu.
+	 */
+	protected function addBreadcrumb(string $title, ?string $link = null): void
+	{
+		$this->breadcrumbs[] = [
+			'title' => $title,
+			'link' => $link,
+		];
 	}
 
 	/**

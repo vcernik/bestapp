@@ -46,4 +46,10 @@ final class HomePresenter extends BasePrivatePresenter
 	{
 	}
 
+	protected function startup(): void
+	{
+		parent::startup();
+		$this->addBreadcrumb('Dashboard');
+	}
+
 }
