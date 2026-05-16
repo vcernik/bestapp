@@ -1,0 +1,2 @@
+INSERT INTO `admin_user` (`id`, `username`, `name`, `password_hash`, `failed_count`, `blocked_until`, `last_attempt_at`, `created_at`, `updated_at`) VALUES
+(17,	'admin',	'admin',	'$2y$12$Gm1KGyIBumcr.pf5Qogl8e144qE0VgqhXFoExA.h/24pYLSIHZ4KK',	0,	NULL,	NULL,	'2026-05-15 23:16:42',	'2026-05-15 21:16:42');

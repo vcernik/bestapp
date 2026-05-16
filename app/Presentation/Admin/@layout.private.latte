@@ -29,11 +29,11 @@
 					<hr>
 					<div class="dropdown">
 						<a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="adminSidebarUser" data-bs-toggle="dropdown" aria-expanded="false">
-							<img src="https://github.com/mdo.png" alt="avatar" width="32" height="32" class="rounded-circle me-2">
+							<i class="fa-solid fa-user-circle fs-4 me-2" aria-hidden="true"></i>
 							<strong>{$currentUser->name ?? $currentUser->username ?? 'Správce'}</strong>
 						</a>
 						<ul class="dropdown-menu text-small shadow" aria-labelledby="adminSidebarUser">
-							<li><a class="dropdown-item" n:href="Profile:default">Profil</a></li>
+							<li><a class="dropdown-item" n:href="Profile:default">Profil, změna hesla</a></li>
 							<li><a class="dropdown-item text-danger" n:href=":Admin:Public:Sign:out">Odhlásit</a></li>
 						</ul>
 					</div>
