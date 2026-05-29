@@ -15,7 +15,7 @@ final class RouterFactory
 		$router = new RouteList;
 
 		$adminRouter = $router->withModule('Admin');
-		$adminRouter->addRoute('admin/sign[/<action>]', 'Public:Sign:in');
+		$adminRouter->addRoute('admin/sign[/<action>]', 'AdminPublic:Sign:in');
 		$adminRouter->addRoute('admin/<presenter>/<action>[/<id>]', 'Home:default');
 		$adminRouter->addRoute('admin', 'Home:default');
 

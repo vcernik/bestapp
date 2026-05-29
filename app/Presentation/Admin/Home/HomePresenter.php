@@ -20,6 +20,12 @@ final class HomePresenter extends BasePrivatePresenter
 		parent::__construct($adminMenuProvider);
 	}
 
+	protected function startup(): void
+	{
+		parent::startup();
+		$this->addBreadcrumb('Dashboard');
+	}
+
 	protected function createComponentArticlesGrid(): Datagrid
 	{
 		$grid = $this->datagridFactory->create();
@@ -42,14 +48,12 @@ final class HomePresenter extends BasePrivatePresenter
 	}
 
 
+	
+
 	public function renderDefault(): void
 	{
+		
 	}
 
-	protected function startup(): void
-	{
-		parent::startup();
-		$this->addBreadcrumb('Dashboard');
-	}
 
 }

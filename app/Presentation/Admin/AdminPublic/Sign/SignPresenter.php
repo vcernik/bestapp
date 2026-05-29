@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace App\Presentation\Admin\Public\Sign;
+namespace App\Presentation\Admin\AdminPublic\Sign;
 
 use App\Core\Security\AdminActivityLogger;
 use App\Presentation\Admin\Accessory\AdminMenuProvider;
 use App\Presentation\Admin\Accessory\BootstrapFormFactory;
-use App\Presentation\Admin\Public\Accessory\BasePublicPresenter;
+use App\Presentation\Admin\AdminPublic\Accessory\BasePublicPresenter;
 use Nette;
 use Nette\Application\UI\Form;
 

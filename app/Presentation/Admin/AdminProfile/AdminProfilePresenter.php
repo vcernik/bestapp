@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Presentation\Admin\Profile;
+namespace App\Presentation\Admin\AdminProfile;
 
 use App\Core\Security\AdminPasswordChangeFacade;
 use App\Presentation\Admin\Accessory\AdminMenuProvider;
@@ -8,7 +8,7 @@ use App\Presentation\Admin\Accessory\BasePrivatePresenter;
 use App\Presentation\Admin\Accessory\BootstrapFormFactory;
 use Nette\Application\UI\Form;
 
-final class ProfilePresenter extends BasePrivatePresenter
+final class AdminProfilePresenter extends BasePrivatePresenter
 {
 	public function __construct(
 		AdminMenuProvider $adminMenuProvider,
@@ -19,6 +19,12 @@ final class ProfilePresenter extends BasePrivatePresenter
 		parent::__construct($adminMenuProvider);
 	}
 
+	protected function startup(): void
+	{
+		parent::startup();
+		$this->addBreadcrumb('Změna hesla');
+	}
+	
 	protected function createComponentChangePasswordForm(): Form
 	{
 		$form = $this->bootstrapFormFactory->create();
@@ -55,9 +61,5 @@ final class ProfilePresenter extends BasePrivatePresenter
 		return $form;
 	}
 
-	protected function startup(): void
-	{
-		parent::startup();
-		$this->addBreadcrumb('Profil');
-	}
+	
 }

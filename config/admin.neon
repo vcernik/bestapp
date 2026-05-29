@@ -4,5 +4,3 @@ parameters:
         menu:
             - name: Přehled
               link: Home:default
-            - name: Profil
-              link: Profile:default

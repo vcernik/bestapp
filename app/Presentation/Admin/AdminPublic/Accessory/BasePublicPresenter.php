@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Presentation\Admin\Public\Accessory;
+namespace App\Presentation\Admin\AdminPublic\Accessory;
 
 use App\Presentation\Admin\Accessory\AdminMenuProvider;
 use Nette\Bridges\SecurityHttp\SessionStorage;

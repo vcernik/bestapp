@@ -30,8 +30,8 @@ abstract class BasePrivatePresenter extends Nette\Application\UI\Presenter
 		$this->getUser()->setExpiration('3 hours', true);
 
 		if (!$this->getUser()->isLoggedIn()) {
-			$this->flashMessage('Relace vypršela nebo nejste přihlášen. Přihlaste se prosím znovu.', 'info');
-			$this->redirect(':Admin:Public:Sign:in');
+			$this->flashMessage('Relace vypršela nebo nejste přihlášen(a). Přihlaste se prosím znovu.', 'info');
+			$this->redirect(':Admin:AdminPublic:Sign:in');
 		}
 
 		$this->breadcrumbs = [];
@@ -56,6 +56,8 @@ abstract class BasePrivatePresenter extends Nette\Application\UI\Presenter
 			'title' => $title,
 			'link' => $link,
 		];
+		
+		$this->template->pageTitle = $title;
 	}
 
 	/**
