@@ -4,7 +4,6 @@ namespace App\Presentation\Admin\Home;
 
 use App\Model\Orm\Article\ArticleRepository;
 use App\Presentation\Admin\Accessory\BasePrivatePresenter;
-use App\Presentation\Admin\Accessory\AdminMenuProvider;
 use App\Presentation\Admin\Accessory\DatagridFactory;
 use Contributte\Datagrid\Datagrid;
 
@@ -12,12 +11,10 @@ use Contributte\Datagrid\Datagrid;
 final class HomePresenter extends BasePrivatePresenter
 {
 	public function __construct(
-		AdminMenuProvider $adminMenuProvider,
 		private readonly ArticleRepository $articleRepository,
 		private readonly DatagridFactory $datagridFactory,
 	)
 	{
-		parent::__construct($adminMenuProvider);
 	}
 
 	protected function startup(): void

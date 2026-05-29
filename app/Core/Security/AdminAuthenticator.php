@@ -37,6 +37,11 @@ final class AdminAuthenticator implements Authenticator
 			throw new AuthenticationException('Účet je dočasně zablokován. Zkuste to později.', self::NotApproved);
 		}
 
+		if (!$user->enabled) {
+			$this->adminActivityLogger->log($user->id, 'auth.login.blocked', ['reason' => 'disabled']);
+			throw new AuthenticationException('Účet je deaktivován.', self::NotApproved);
+		}
+
 		if (!$this->adminUserManager->verifyPassword($user, $password)) {
 			$user->failedCount++;
 			$user->lastAttemptAt = $now;
@@ -57,6 +62,7 @@ final class AdminAuthenticator implements Authenticator
 		return new SimpleIdentity($user->id, ['admin'], [
 			'username' => $user->username,
 			'name' => $user->name,
+			'updatedAt' => $user->updatedAt->getTimestamp(),
 		]);
 	}
 }

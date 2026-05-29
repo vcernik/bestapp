@@ -3,7 +3,6 @@
 namespace App\Presentation\Admin\AdminPublic\Sign;
 
 use App\Core\Security\AdminActivityLogger;
-use App\Presentation\Admin\Accessory\AdminMenuProvider;
 use App\Presentation\Admin\Accessory\BootstrapFormFactory;
 use App\Presentation\Admin\AdminPublic\Accessory\BasePublicPresenter;
 use Nette;
@@ -12,12 +11,10 @@ use Nette\Application\UI\Form;
 final class SignPresenter extends BasePublicPresenter
 {
 	public function __construct(
-		AdminMenuProvider $adminMenuProvider,
 		private readonly BootstrapFormFactory $bootstrapFormFactory,
 		private readonly AdminActivityLogger $adminActivityLogger,
 	)
 	{
-		parent::__construct($adminMenuProvider);
 	}
 
 	protected function createComponentSignInForm(): Form

@@ -84,11 +84,28 @@ test('authenticate succeeds and resets security counters', function () use ($aut
 		Assert::same($user->id, $identity->getId());
 		Assert::same(['admin'], $identity->getRoles());
 		Assert::same($user->username, $identity->getData()['username']);
+		Assert::type('int', $identity->getData()['updatedAt']);
 
 		$finalUser = testOrm()->adminUsers->getById($user->id);
 		Assert::notNull($finalUser);
 		Assert::same(0, $finalUser->failedCount);
 		Assert::null($finalUser->blockedUntil);
+	} finally {
+		cleanupAdminUser($user);
+	}
+});
+
+
+test('authenticate throws not approved for disabled account', function () use ($authenticator): void {
+	$user = createTestAdminUser(password: 'correct-password-12345', enabled: false);
+
+	try {
+		try {
+			$authenticator->authenticate($user->username, 'correct-password-12345');
+			Assert::fail('AuthenticationException was expected.');
+		} catch (AuthenticationException $exception) {
+			Assert::same(AuthenticatorCodes::NotApproved, $exception->getCode());
+		}
 	} finally {
 		cleanupAdminUser($user);
 	}

@@ -1,0 +1,2 @@
+ALTER TABLE admin_user
+	ADD COLUMN enabled TINYINT(1) NOT NULL DEFAULT 1 AFTER name;

@@ -2,7 +2,9 @@
 
 namespace App\Presentation\Admin\Accessory;
 
+use App\Core\Security\AdminSessionSecurityService;
 use Nette\Bridges\SecurityHttp\SessionStorage;
+use Nette\DI\Attributes\Inject;
 use Nette;
 
 abstract class BasePrivatePresenter extends Nette\Application\UI\Presenter
@@ -12,12 +14,11 @@ abstract class BasePrivatePresenter extends Nette\Application\UI\Presenter
 	 */
 	protected array $breadcrumbs = [];
 
-	public function __construct(
-		private readonly AdminMenuProvider $adminMenuProvider,
-	)
-	{
-		parent::__construct();
-	}
+	#[Inject]
+	public AdminMenuProvider $adminMenuProvider;
+
+	#[Inject]
+	public AdminSessionSecurityService $adminSessionSecurityService;
 
 	protected function startup(): void
 	{
@@ -31,6 +32,11 @@ abstract class BasePrivatePresenter extends Nette\Application\UI\Presenter
 
 		if (!$this->getUser()->isLoggedIn()) {
 			$this->flashMessage('Relace vypršela nebo nejste přihlášen(a). Přihlaste se prosím znovu.', 'info');
+			$this->redirect(':Admin:AdminPublic:Sign:in');
+		}
+
+		if (!$this->adminSessionSecurityService->validateAndRefresh($this->getUser())) {
+			$this->flashMessage(AdminSessionSecurityService::FORCED_LOGOUT_MESSAGE, 'warning');
 			$this->redirect(':Admin:AdminPublic:Sign:in');
 		}
 

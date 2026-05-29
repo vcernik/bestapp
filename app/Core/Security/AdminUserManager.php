@@ -32,6 +32,7 @@ final class AdminUserManager
 
 		if ($existing === null) {
 			$existing = new AdminUser;
+			$existing->enabled = true;
 		}
 
 		$existing->username = $normalizedUsername;

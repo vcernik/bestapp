@@ -4,16 +4,13 @@ namespace App\Presentation\Admin\AdminPublic\Accessory;
 
 use App\Presentation\Admin\Accessory\AdminMenuProvider;
 use Nette\Bridges\SecurityHttp\SessionStorage;
+use Nette\DI\Attributes\Inject;
 use Nette;
 
 abstract class BasePublicPresenter extends Nette\Application\UI\Presenter
 {
-	public function __construct(
-		private readonly AdminMenuProvider $adminMenuProvider,
-	)
-	{
-		parent::__construct();
-	}
+	#[Inject]
+	public AdminMenuProvider $adminMenuProvider;
 
 	protected function startup(): void
 	{

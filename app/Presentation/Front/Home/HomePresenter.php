@@ -12,7 +12,6 @@ final class HomePresenter extends Nette\Application\UI\Presenter
 		private readonly ArticleRepository $articleRepository,
 	)
 	{
-		parent::__construct();
 	}
 
 
