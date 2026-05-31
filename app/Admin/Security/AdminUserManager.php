@@ -2,7 +2,7 @@
 
 namespace App\Admin\Security;
 
-use App\Model\Orm\AdminUser\AdminUser;
+use App\Admin\Model\Orm\AdminUser\AdminUser;
 use App\Model\Orm\Orm;
 use Nette\Security\Passwords;
 

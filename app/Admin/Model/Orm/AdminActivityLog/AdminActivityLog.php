@@ -2,6 +2,16 @@
 
 namespace App\Admin\Model\Orm\AdminActivityLog;
 
-class AdminActivityLog extends \App\Model\Orm\AdminActivityLog\AdminActivityLog
+use Nextras\Orm\Entity\Entity;
+
+
+/**
+ * @property int $id {primary}
+ * @property ?int $userId
+ * @property string $action
+ * @property string $payloadJson
+ * @property \DateTimeImmutable $createdAt
+ */
+class AdminActivityLog extends Entity
 {
 }

@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 use App\Admin\Security\AdminSessionSecurityService;
-use App\Model\Orm\AdminUser\AdminUser;
+use App\Admin\Model\Orm\AdminUser\AdminUser;
 use Nette\Bridges\SecurityHttp\SessionStorage;
 use Nette\Security\SimpleIdentity;
 use Nette\Security\User;

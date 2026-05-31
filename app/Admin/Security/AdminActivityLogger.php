@@ -2,7 +2,7 @@
 
 namespace App\Admin\Security;
 
-use App\Model\Orm\AdminActivityLog\AdminActivityLog;
+use App\Admin\Model\Orm\AdminActivityLog\AdminActivityLog;
 use App\Model\Orm\Orm;
 
 final class AdminActivityLogger

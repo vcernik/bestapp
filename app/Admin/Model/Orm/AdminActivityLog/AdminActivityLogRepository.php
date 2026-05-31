@@ -2,6 +2,25 @@
 
 namespace App\Admin\Model\Orm\AdminActivityLog;
 
-class AdminActivityLogRepository extends \App\Model\Orm\AdminActivityLog\AdminActivityLogRepository
+use Nextras\Orm\Collection\ICollection;
+use Nextras\Orm\Repository\Repository;
+
+
+/**
+ * @extends Repository<AdminActivityLog>
+ */
+class AdminActivityLogRepository extends Repository
 {
+	public static function getEntityClassNames(): array
+	{
+		return [AdminActivityLog::class];
+	}
+
+	/**
+	 * @return ICollection<AdminActivityLog>
+	 */
+	public function findOlderThan(\DateTimeImmutable $threshold): ICollection
+	{
+		return $this->findBy(['createdAt<' => $threshold]);
+	}
 }

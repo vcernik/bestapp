@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
+use App\Admin\Model\Orm\AdminActivityLog\AdminActivityLog;
+use App\Admin\Model\Orm\AdminUser\AdminUser;
 use App\Admin\Security\AdminUserManager;
-use App\Model\Orm\AdminActivityLog\AdminActivityLog;
-use App\Model\Orm\AdminUser\AdminUser;
 use Nextras\Orm\Collection\ICollection;
 
 function generateTestUsername(): string

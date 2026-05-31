@@ -2,6 +2,21 @@
 
 namespace App\Admin\Model\Orm\AdminUser;
 
-class AdminUser extends \App\Model\Orm\AdminUser\AdminUser
+use Nextras\Orm\Entity\Entity;
+
+
+/**
+ * @property int $id {primary}
+ * @property string $username
+ * @property string $name
+ * @property bool $enabled {default true}
+ * @property string $passwordHash
+ * @property int $failedCount {default 0}
+ * @property ?\DateTimeImmutable $blockedUntil
+ * @property ?\DateTimeImmutable $lastAttemptAt
+ * @property \DateTimeImmutable $createdAt {default now}
+ * @property \DateTimeImmutable $updatedAt {default now}
+ */
+class AdminUser extends Entity
 {
 }

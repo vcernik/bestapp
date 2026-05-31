@@ -2,8 +2,8 @@
 
 namespace App\Core\Command;
 
+use App\Admin\Model\Orm\AdminUser\AdminUser;
 use App\Admin\Security\AdminUserManager;
-use App\Model\Orm\AdminUser\AdminUser;
 use App\Model\Orm\Orm;
 
 final class SetAdminUserPasswordCommand

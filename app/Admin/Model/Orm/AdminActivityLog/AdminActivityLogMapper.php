@@ -2,6 +2,13 @@
 
 namespace App\Admin\Model\Orm\AdminActivityLog;
 
-class AdminActivityLogMapper extends \App\Model\Orm\AdminActivityLog\AdminActivityLogMapper
+use Nextras\Orm\Mapper\Dbal\DbalMapper;
+
+
+/**
+ * @extends DbalMapper<AdminActivityLog>
+ */
+class AdminActivityLogMapper extends DbalMapper
 {
+	protected string|\Nextras\Dbal\Platforms\Data\Fqn|null $tableName = 'admin_activity_log';
 }

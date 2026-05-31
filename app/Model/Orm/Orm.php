@@ -2,8 +2,8 @@
 
 namespace App\Model\Orm;
 
-use App\Model\Orm\AdminActivityLog\AdminActivityLogRepository;
-use App\Model\Orm\AdminUser\AdminUserRepository;
+use App\Admin\Model\Orm\AdminActivityLog\AdminActivityLogRepository;
+use App\Admin\Model\Orm\AdminUser\AdminUserRepository;
 use App\Model\Orm\Article\ArticleRepository;
 use Nextras\Orm\Model\Model;
 
