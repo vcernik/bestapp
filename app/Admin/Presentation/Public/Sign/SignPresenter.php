@@ -26,7 +26,6 @@ final class SignPresenter extends BasePublicPresenter
 		$form->addPassword('password', 'Heslo')
 			->setRequired('Zadejte heslo.');
 
-		$form->addCheckbox('remember', 'Zapamatovat si mě');
 		$form->addSubmit('send', 'Přihlásit se');
 
 		$form->onSuccess[] = function (Form $form, \stdClass $values): void {
@@ -61,8 +60,6 @@ final class SignPresenter extends BasePublicPresenter
 	{
 		try {
 			$this->getUser()->login($values->username, $values->password);
-			$expiration = $values->remember ? '3 hours' : '3 hours';
-			$this->getUser()->setExpiration($expiration, true);
 			$this->flashMessage('Přihlášení proběhlo úspěšně.', 'success');
 			$this->redirect(':Admin:Home:default');
 		} catch (Nette\Security\AuthenticationException $exception) {
