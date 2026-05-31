@@ -17,6 +17,6 @@ use Nextras\Orm\Entity\Entity;
  * @property \DateTimeImmutable $createdAt {default now}
  * @property \DateTimeImmutable $updatedAt {default now}
  */
-final class AdminUser extends Entity
+class AdminUser extends Entity
 {
 }

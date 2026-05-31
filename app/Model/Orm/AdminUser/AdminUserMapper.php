@@ -8,7 +8,7 @@ use Nextras\Orm\Mapper\Dbal\DbalMapper;
 /**
  * @extends DbalMapper<AdminUser>
  */
-final class AdminUserMapper extends DbalMapper
+class AdminUserMapper extends DbalMapper
 {
 	protected string|\Nextras\Dbal\Platforms\Data\Fqn|null $tableName = 'admin_user';
 }

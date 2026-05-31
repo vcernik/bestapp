@@ -68,4 +68,4 @@ ddev composer tester
 - Composer příkazy vždy spouštět přes DDEV (`ddev composer ...`), ne přímo `composer ...`
 - PHP skripty vždy spouštět přes DDEV (`ddev php ...`), ne přímo `php ...`
 - Modul `Admin` používá Bootstrap 5 (včetně UI komponent) a nepoužívá Tailwind CSS
-- Pro modul `Admin` používat samostatný Vite entrypoint `assets/admin.js` a v admin layoutu includovat `{asset 'admin.js'}` kvůli HMR/full reload
+- Pro modul `Admin` používat samostatný Vite entrypoint `../app/Admin/assets/admin.js` a v admin layoutu includovat `{asset '../app/Admin/assets/admin.js'}` kvůli HMR/full reload

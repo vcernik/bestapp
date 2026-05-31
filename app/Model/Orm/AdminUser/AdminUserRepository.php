@@ -8,7 +8,7 @@ use Nextras\Orm\Repository\Repository;
 /**
  * @extends Repository<AdminUser>
  */
-final class AdminUserRepository extends Repository
+class AdminUserRepository extends Repository
 {
 	public static function getEntityClassNames(): array
 	{

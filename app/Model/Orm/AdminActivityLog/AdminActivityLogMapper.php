@@ -8,7 +8,7 @@ use Nextras\Orm\Mapper\Dbal\DbalMapper;
 /**
  * @extends DbalMapper<AdminActivityLog>
  */
-final class AdminActivityLogMapper extends DbalMapper
+class AdminActivityLogMapper extends DbalMapper
 {
 	protected string|\Nextras\Dbal\Platforms\Data\Fqn|null $tableName = 'admin_activity_log';
 }

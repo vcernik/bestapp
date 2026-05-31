@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-use App\Core\Security\AdminUserManager;
+use App\Admin\Security\AdminUserManager;
 use App\Model\Orm\AdminActivityLog\AdminActivityLog;
 use App\Model\Orm\AdminUser\AdminUser;
 use Nextras\Orm\Collection\ICollection;

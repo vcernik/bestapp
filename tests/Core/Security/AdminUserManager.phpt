@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-use App\Core\Security\AdminUserManager;
+use App\Admin\Security\AdminUserManager;
 use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';

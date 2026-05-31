@@ -12,6 +12,6 @@ use Nextras\Orm\Entity\Entity;
  * @property string $payloadJson
  * @property \DateTimeImmutable $createdAt
  */
-final class AdminActivityLog extends Entity
+class AdminActivityLog extends Entity
 {
 }

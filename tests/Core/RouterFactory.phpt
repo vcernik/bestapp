@@ -23,7 +23,7 @@ test('admin sign route matches admin public sign presenter', function (): void {
 	$request = new Request(new UrlScript('http://localhost/admin/sign/in', '/'));
 	$params = $router->match($request);
 
-	Assert::same('Admin:AdminPublic:Sign', $params['presenter'] ?? null);
+	Assert::same('Admin:Public:Sign', $params['presenter'] ?? null);
 	Assert::same('in', $params['action'] ?? null);
 });
 
@@ -57,7 +57,7 @@ test('admin adminpublic sign link is generated', function (): void {
 	$router = RouterFactory::createRouter();
 	$url = $router->constructUrl(
 		[
-			'presenter' => 'Admin:AdminPublic:Sign',
+			'presenter' => 'Admin:Public:Sign',
 			'action' => 'in',
 		],
 		new UrlScript('http://localhost/', '/'),
