@@ -14,10 +14,14 @@ final class RouterFactory
 	{
 		$router = new RouteList;
 
+
+		$adminRouter = $router->withModule('AdminCore');
+		$adminRouter->addRoute('admin/core/sign[/<action>]', 'Public:Sign:in');
+		$adminRouter->addRoute('admin/core/<presenter>/<action>[/<id>]', 'Home:default');
+
 		$adminRouter = $router->withModule('Admin');
-		$adminRouter->addRoute('admin/sign[/<action>]', 'Public:Sign:in');
 		$adminRouter->addRoute('admin/<presenter>/<action>[/<id>]', 'Home:default');
-		$adminRouter->addRoute('admin', 'Home:default');
+
 
 		$router->withModule('Front')
 			->addRoute('<presenter>/<action>[/<id>]', 'Home:default');

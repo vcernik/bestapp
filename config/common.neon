@@ -14,7 +14,7 @@ application:
 		4xx: Error:Error4xx
 		5xx: Error:Error5xx
 	mapping:
-		Admin: App\Admin\Presentation\*\**Presenter
+		AdminCore: App\AdminCore\Presentation\*\**Presenter
 		*: App\Presentation\*\**Presenter
 
 
@@ -38,7 +38,7 @@ nextras.orm:
 
 
 nextras.adminOrm:
-	model: App\Admin\Model\Orm\AdminOrm
+	model: App\AdminCore\Model\Orm\AdminOrm
 	connection: @nextras.dbal.connection
 	autowiredInternalServices: false
 

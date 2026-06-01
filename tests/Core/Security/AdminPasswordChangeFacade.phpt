@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
-use App\Admin\Security\AdminPasswordChangeFacade;
-use App\Admin\Security\AdminUserManager;
+use App\AdminCore\Security\AdminPasswordChangeFacade;
+use App\AdminCore\Security\AdminUserManager;
 use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';

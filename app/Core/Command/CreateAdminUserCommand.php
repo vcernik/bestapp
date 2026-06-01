@@ -2,8 +2,8 @@
 
 namespace App\Core\Command;
 
-use App\Admin\Model\Orm\AdminUser\AdminUser;
-use App\Admin\Security\AdminUserManager;
+use App\AdminCore\Model\Orm\AdminUser\AdminUser;
+use App\AdminCore\Security\AdminUserManager;
 
 final class CreateAdminUserCommand
 {

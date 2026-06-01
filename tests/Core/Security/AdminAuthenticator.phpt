@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-use App\Admin\Security\AdminAuthenticator;
+use App\AdminCore\Security\AdminAuthenticator;
 use Nette\Security\Authenticator as AuthenticatorCodes;
 use Nette\Security\AuthenticationException;
 use Tester\Assert;

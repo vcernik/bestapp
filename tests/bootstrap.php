@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 use App\Bootstrap;
-use App\Admin\Model\Orm\AdminOrm;
+use App\AdminCore\Model\Orm\AdminOrm;
 use App\Model\Orm\Orm;
 use Nette\DI\Container;
 

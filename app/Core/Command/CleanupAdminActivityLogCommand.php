@@ -2,7 +2,7 @@
 
 namespace App\Core\Command;
 
-use App\Admin\Model\Orm\AdminOrm;
+use App\AdminCore\Model\Orm\AdminOrm;
 
 final class CleanupAdminActivityLogCommand
 {

@@ -1,3 +1,3 @@
 <?php declare(strict_types=1);
 
-require __DIR__ . '/../app/Admin/bin/admin.php';
+require __DIR__ . '/../app/AdminCore/bin/admin.php';

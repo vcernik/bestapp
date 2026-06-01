@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-use App\Admin\Security\AdminActivityLogger;
+use App\AdminCore\Security\AdminActivityLogger;
 use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';

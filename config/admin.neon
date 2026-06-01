@@ -3,4 +3,4 @@ parameters:
         appName: Bestapp Admin
         menu:
             - name: Přehled
-              link: Home:default
+              link: :Admin:Home:default

@@ -1,0 +1,73 @@
+{layout '@layout.base.latte'}
+
+{block head}
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css">
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@contributte/datagrid@master/dist/datagrid-full.css">
+	<script defer src="https://cdn.jsdelivr.net/npm/@contributte/datagrid@master/dist/datagrid-full.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/js/bootstrap.bundle.min.js"></script>
+	<style>
+		.datagrid{
+			padding-left: 0;
+			padding-right: 0;
+		}
+	</style>
+{/block}
+
+{block body}
+	<div class="min-vh-100 d-flex flex-column">
+		<div class="container-fluid px-0" style="flex: 1 1 auto;">
+			<div class="row g-0 min-vh-100">
+				<aside class="admin-sidebar col-12 col-lg-3 col-xl-2 border-end bg-light d-flex flex-column p-3">
+					<a n:href=":Admin:Home:default" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+						<i class="fa-solid fa-shield-halved fs-4 me-2"></i>
+						<span class="fs-5">{$appName ?? 'Administrace'}</span>
+					</a>
+					<hr>
+
+					<ul class="nav nav-pills flex-column mb-auto" aria-label="Hlavní menu administrace">
+						<li n:foreach="$adminMenuItems as $item" class="nav-item">
+							<a n:href="$item['destination'], ...$item['params']" class="nav-link {$presenter->isLinkCurrent($item['destination'], $item['params']) ? 'active' : 'link-dark'}" aria-current="{$presenter->isLinkCurrent($item['destination'], $item['params']) ? 'page' : null}">
+								{$item['name']}
+							</a>
+						</li>
+					</ul>
+
+					<hr>
+					<div class="dropdown">
+						<a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="adminSidebarUser" data-bs-toggle="dropdown" aria-expanded="false">
+							<i class="fa-solid fa-user-circle fs-4 me-2" aria-hidden="true"></i>
+							<strong>{$currentUser->name ?? $currentUser->username ?? 'Správce'}</strong>
+						</a>
+						<ul class="dropdown-menu text-small shadow" aria-labelledby="adminSidebarUser">
+							<li><a class="dropdown-item" n:href=":AdminCore:Profile:default">Změna hesla</a></li>
+							<li><a class="dropdown-item text-danger" n:href=":AdminCore:Public:Sign:out">Odhlásit</a></li>
+						</ul>
+					</div>
+				</aside>
+
+				<main class="col-12 col-lg-9 col-xl-10 p-3 p-md-4 p-xl-5 py-xl-4 bg-white">
+					{block breadcrumbs}
+					<nav aria-label="breadcrumb" class="mb-3">
+						<ol class="breadcrumb mb-0 small">
+							<li n:foreach="$breadcrumbs as $item" class="breadcrumb-item {if $item['link'] === null}active{/if}" aria-current="{if $item['link'] === null}page{/if}">
+								{if $item['link'] !== null}
+									<a n:href="$item['link']" class="text-decoration-none">{$item['title']}</a>
+								{else}
+									{$item['title']}
+								{/if}
+							</li>
+						</ol>
+					</nav>
+					{/block}
+					<div class="my-3">
+						<div n:foreach="$flashes as $flash" class="alert alert-{$flash->type ?: 'info'} mb-2" role="alert">{$flash->message}</div>
+					</div>
+					{if isset($pageTitle)}
+						<h3 class="h3 my-4" n:block="title">{$pageTitle}</h3>
+					{/if}
+					{include content}
+				</main>
+			</div>
+		</div>
+	</div>
+{/block}

@@ -20,10 +20,10 @@ test('admin route matches default presenter and action', function (): void {
 
 test('admin sign route matches admin public sign presenter', function (): void {
 	$router = RouterFactory::createRouter();
-	$request = new Request(new UrlScript('http://localhost/admin/sign/in', '/'));
+	$request = new Request(new UrlScript('http://localhost/admin/core/sign/in', '/'));
 	$params = $router->match($request);
 
-	Assert::same('Admin:Public:Sign', $params['presenter'] ?? null);
+	Assert::same('AdminCore:Public:Sign', $params['presenter'] ?? null);
 	Assert::same('in', $params['action'] ?? null);
 });
 
@@ -43,13 +43,13 @@ test('admin presenter link is generated', function (): void {
 	$router = RouterFactory::createRouter();
 	$url = $router->constructUrl(
 		[
-			'presenter' => 'Admin:Home',
+			'presenter' => 'AdminCore:Profile',
 			'action' => 'default',
 		],
 		new UrlScript('http://localhost/', '/'),
 	);
 
-	Assert::same('http://localhost/admin/', $url);
+	Assert::same('http://localhost/admin/core/profile/', $url);
 });
 
 
@@ -57,11 +57,11 @@ test('admin adminpublic sign link is generated', function (): void {
 	$router = RouterFactory::createRouter();
 	$url = $router->constructUrl(
 		[
-			'presenter' => 'Admin:Public:Sign',
+			'presenter' => 'AdminCore:Public:Sign',
 			'action' => 'in',
 		],
 		new UrlScript('http://localhost/', '/'),
 	);
 
-	Assert::same('http://localhost/admin/sign', $url);
+	Assert::same('http://localhost/admin/core/sign', $url);
 });
