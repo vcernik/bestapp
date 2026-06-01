@@ -49,7 +49,7 @@ Reset DB a kompletní znovunahrání:
 
 
 # Admin
-Create new user: `ddev php app/Admin/bin/admin.php admin:user:create`
+Create new user: `ddev php app/AdminCore/bin/admin.php admin:user:create`
 
 Neinteraktivně lze použít parametry:
-`ddev php app/Admin/bin/admin.php admin:user:create --username=admin --name="Admin User" --password="very-strong-password"`
+`ddev php app/AdminCore/bin/admin.php admin:user:create --username=admin --name="Admin User" --password="very-strong-password"`

@@ -10,13 +10,19 @@
 			padding-left: 0;
 			padding-right: 0;
 		}
+
+		@media (min-width: 992px) {
+			.min-vh-lg-100 {
+				min-height: 100vh;
+			}
+		}
 	</style>
 {/block}
 
 {block body}
 	<div class="min-vh-100 d-flex flex-column">
 		<div class="container-fluid px-0" style="flex: 1 1 auto;">
-			<div class="row g-0 min-vh-100">
+			<div class="row g-0 min-vh-lg-100">
 				<aside class="admin-sidebar col-12 col-lg-3 col-xl-2 border-end bg-light d-flex flex-column p-3">
 					<a n:href=":Admin:Home:default" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
 						<i class="fa-solid fa-shield-halved fs-4 me-2"></i>
@@ -26,9 +32,27 @@
 
 					<ul class="nav nav-pills flex-column mb-auto" aria-label="Hlavní menu administrace">
 						<li n:foreach="$adminMenuItems as $item" class="nav-item">
-							<a n:href="$item['destination'], ...$item['params']" class="nav-link {$presenter->isLinkCurrent($item['destination'], $item['params']) ? 'active' : 'link-dark'}" aria-current="{$presenter->isLinkCurrent($item['destination'], $item['params']) ? 'page' : null}">
-								{$item['name']}
-							</a>
+							{if isset($item['items'])}
+								{var $hasActiveChild = false}
+								{foreach $item['items'] as $child}
+									{if isset($child['destination']) && $presenter->isLinkCurrent($child['destination'], $child['params'] ?? [])}
+										{var $hasActiveChild = true}
+									{/if}
+								{/foreach}
+								<div class="nav-link text-secondary fw-semibold {*$hasActiveChild ? 'active' : 'link-dark'*}">{$item['name']}</div>
+								<ul class="nav nav-pills flex-column ms-3 mb-2" aria-label="Podmenu {$item['name']}">
+									<li n:foreach="$item['items'] as $child" class="nav-item">
+										<a n:if="isset($child['destination'])" n:href="$child['destination'], ...($child['params'] ?? [])" class="nav-link py-1 {$presenter->isLinkCurrent($child['destination'], $child['params'] ?? []) ? 'active' : 'link-dark'}" aria-current="{$presenter->isLinkCurrent($child['destination'], $child['params'] ?? []) ? 'page' : null}">
+											{$child['name']}
+										</a>
+										<span n:if="!isset($child['destination'])" class="nav-link py-1 link-secondary">{$child['name']}</span>
+									</li>
+								</ul>
+							{else}
+								<a n:if="isset($item['destination'])" n:href="$item['destination'], ...($item['params'] ?? [])" class="nav-link {$presenter->isLinkCurrent($item['destination'], $item['params'] ?? []) ? 'active' : 'link-dark'}" aria-current="{$presenter->isLinkCurrent($item['destination'], $item['params'] ?? []) ? 'page' : null}">
+									{$item['name']}
+								</a>
+							{/if}
 						</li>
 					</ul>
 

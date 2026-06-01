@@ -7,7 +7,7 @@ import FullReload from 'vite-plugin-full-reload';
 export default defineConfig({
 	plugins: [
 		nette({
-			entry: ['main.js', '../app/Admin/assets/admin.js'],
+			entry: ['main.js', '../app/AdminCore/assets/admin.js'],
 		}),
 		FullReload([
 			'app/**/*.latte',

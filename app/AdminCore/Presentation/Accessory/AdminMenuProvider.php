@@ -7,14 +7,14 @@ use InvalidArgumentException;
 final class AdminMenuProvider
 {
 	/**
-	 * @var list<array{name: string, destination: string, params: array<string, scalar|null>}>
+	 * @var list<array{name: string, destination?: string, params?: array<string, scalar|null>, items?: list<array{name: string, destination?: string, params?: array<string, scalar|null>, items?: list<mixed>}>}>
 	 */
 	private array $items;
 
 	private readonly string $appName;
 
 	/**
-	 * @param array<int, array{name?: mixed, link?: mixed}> $items
+	 * @param array<int, array{name?: mixed, link?: mixed, items?: mixed}> $items
 	 */
 	public function __construct(string $appName, array $items)
 	{
@@ -26,7 +26,7 @@ final class AdminMenuProvider
 	}
 
 	/**
-	 * @return list<array{name: string, destination: string, params: array<string, scalar|null>}>
+	 * @return list<array{name: string, destination?: string, params?: array<string, scalar|null>, items?: list<array{name: string, destination?: string, params?: array<string, scalar|null>, items?: list<mixed>}>}>
 	 */
 	public function getItems(): array
 	{
@@ -39,24 +39,54 @@ final class AdminMenuProvider
 	}
 
 	/**
-	 * @param array{name?: mixed, link?: mixed} $item
-	 * @return array{name: string, destination: string, params: array<string, scalar|null>}
+	 * @param array{name?: mixed, link?: mixed, items?: mixed} $item
+	 * @return array{name: string, destination?: string, params?: array<string, scalar|null>, items?: list<array{name: string, destination?: string, params?: array<string, scalar|null>, items?: list<mixed>}>>
 	 */
 	private function normalizeItem(array $item): array
 	{
 		$name = $item['name'] ?? null;
-		$link = $item['link'] ?? null;
 
 		if (!is_string($name) || $name === '') {
 			throw new InvalidArgumentException('Admin menu item must define a non-empty "name".');
 		}
 
+		$result = ['name' => $name];
+
+		if (array_key_exists('link', $item)) {
+			[$destination, $params] = $this->normalizeLink($name, $item['link']);
+			$result['destination'] = $destination;
+			$result['params'] = $params;
+		}
+
+		if (array_key_exists('items', $item)) {
+			$items = $item['items'];
+
+			if (!is_array($items)) {
+				throw new InvalidArgumentException(sprintf('Admin menu item "%s" must define "items" as array.', $name));
+			}
+
+			$result['items'] = array_map(
+				fn (mixed $child, int $index): array => $this->normalizeChildItem($name, $child, $index),
+				$items,
+				array_keys($items),
+			);
+		}
+
+		if (!isset($result['destination']) && !isset($result['items'])) {
+			throw new InvalidArgumentException(sprintf('Admin menu item "%s" must define "link" or "items".', $name));
+		}
+
+		return $result;
+	}
+
+	/**
+	 * @param mixed $link
+	 * @return array{0: string, 1: array<string, scalar|null>}
+	 */
+	private function normalizeLink(string $name, mixed $link): array
+	{
 		if (is_string($link) && $link !== '') {
-			return [
-				'name' => $name,
-				'destination' => $link,
-				'params' => [],
-			];
+			return [$link, []];
 		}
 
 		if (!is_array($link)) {
@@ -84,10 +114,19 @@ final class AdminMenuProvider
 			}
 		}
 
-		return [
-			'name' => $name,
-			'destination' => $destination,
-			'params' => $params,
-		];
+		return [$destination, $params];
+	}
+
+	/**
+	 * @param mixed $child
+	 * @return array{name: string, destination?: string, params?: array<string, scalar|null>, items?: list<array{name: string, destination?: string, params?: array<string, scalar|null>, items?: list<mixed>}>>
+	 */
+	private function normalizeChildItem(string $parentName, mixed $child, int $index): array
+	{
+		if (!is_array($child)) {
+			throw new InvalidArgumentException(sprintf('Admin menu item "%s" contains invalid child at index %d.', $parentName, $index));
+		}
+
+		return $this->normalizeItem($child);
 	}
 }

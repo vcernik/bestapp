@@ -1,6 +1,12 @@
 parameters:
-    admin:
-        appName: Bestapp Admin
-        menu:
-            - name: Přehled
-              link: :Admin:Home:default
+	admin:
+		appName: Bestapp Admin
+		menu:
+			- name: Přehled
+				link: ':Admin:Home:default'
+			- name: Správa obsahu
+				items:
+					- name: Články
+						link: ':Admin:Test:default'
+					- name: Kategorie
+						link: ':Admin:Test2:default'
