@@ -47,7 +47,7 @@ test('changePassword updates password and logs success', function () use ($facad
 	try {
 		$facade->changePassword($user->id, 'old-password-12345', 'new-password-12345');
 
-		$reloadedUser = testOrm()->adminUsers->getById($user->id);
+		$reloadedUser = testAdminOrm()->adminUsers->getById($user->id);
 		Assert::notNull($reloadedUser);
 		Assert::true($manager->verifyPassword($reloadedUser, 'new-password-12345'));
 		Assert::false($manager->verifyPassword($reloadedUser, 'old-password-12345'));

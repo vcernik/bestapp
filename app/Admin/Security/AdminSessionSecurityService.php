@@ -2,8 +2,8 @@
 
 namespace App\Admin\Security;
 
+use App\Admin\Model\Orm\AdminOrm;
 use App\Admin\Model\Orm\AdminUser\AdminUser;
-use App\Model\Orm\Orm;
 use Nette\Security\IIdentity;
 use Nette\Security\SimpleIdentity;
 use Nette\Security\User;
@@ -13,7 +13,7 @@ final class AdminSessionSecurityService
 	public const string FORCED_LOGOUT_MESSAGE = 'Váš účet už není platný. Přihlaste se prosím znovu.';
 
 	public function __construct(
-		private readonly Orm $orm,
+		private readonly AdminOrm $orm,
 	)
 	{
 	}

@@ -2,13 +2,13 @@
 
 namespace App\Admin\Security;
 
+use App\Admin\Model\Orm\AdminOrm;
 use App\Admin\Model\Orm\AdminActivityLog\AdminActivityLog;
-use App\Model\Orm\Orm;
 
 final class AdminActivityLogger
 {
 	public function __construct(
-		private readonly Orm $orm,
+		private readonly AdminOrm $orm,
 	)
 	{
 	}

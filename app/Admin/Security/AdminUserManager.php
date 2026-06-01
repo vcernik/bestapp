@@ -2,14 +2,14 @@
 
 namespace App\Admin\Security;
 
+use App\Admin\Model\Orm\AdminOrm;
 use App\Admin\Model\Orm\AdminUser\AdminUser;
-use App\Model\Orm\Orm;
 use Nette\Security\Passwords;
 
 final class AdminUserManager
 {
 	public function __construct(
-		private readonly Orm $orm,
+		private readonly AdminOrm $orm,
 		private readonly Passwords $passwords,
 	)
 	{

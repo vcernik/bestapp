@@ -21,7 +21,7 @@ function createTestAdminUser(
 	$user = $manager->createUser($username ?? generateTestUsername(), $name, $password, true);
 	if (!$enabled) {
 		$user->enabled = false;
-		testOrm()->persistAndFlush($user);
+		testAdminOrm()->persistAndFlush($user);
 	}
 
 	return $user;
@@ -32,7 +32,7 @@ function createTestAdminUser(
  */
 function findLogsByAction(string $action): array
 {
-	$collection = testOrm()->adminActivityLogs->findBy(['action' => $action])
+	$collection = testAdminOrm()->adminActivityLogs->findBy(['action' => $action])
 		->orderBy('id', ICollection::DESC);
 
 	$result = [];
@@ -45,7 +45,7 @@ function findLogsByAction(string $action): array
 
 function cleanupAdminUser(AdminUser $user): void
 {
-	$orm = testOrm();
+	$orm = testAdminOrm();
 	foreach ($orm->adminActivityLogs->findBy(['userId' => $user->id]) as $log) {
 		$orm->remove($log);
 	}
@@ -60,7 +60,7 @@ function cleanupAdminUser(AdminUser $user): void
 
 function cleanupLogsByAction(string $action): void
 {
-	$orm = testOrm();
+	$orm = testAdminOrm();
 	foreach ($orm->adminActivityLogs->findBy(['action' => $action]) as $log) {
 		$orm->remove($log);
 	}

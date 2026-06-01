@@ -2,12 +2,12 @@
 
 namespace App\Admin\Security;
 
-use App\Model\Orm\Orm;
+use App\Admin\Model\Orm\AdminOrm;
 
 final class AdminPasswordChangeFacade
 {
 	public function __construct(
-		private readonly Orm $orm,
+		private readonly AdminOrm $orm,
 		private readonly AdminUserManager $adminUserManager,
 		private readonly AdminActivityLogger $adminActivityLogger,
 	)

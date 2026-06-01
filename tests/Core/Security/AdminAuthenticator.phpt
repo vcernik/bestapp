@@ -38,7 +38,7 @@ test('authenticate increments failed count on wrong password', function () use (
 			Assert::same(AuthenticatorCodes::InvalidCredential, $exception->getCode());
 		}
 
-		$reloadedUser = testOrm()->adminUsers->getById($user->id);
+		$reloadedUser = testAdminOrm()->adminUsers->getById($user->id);
 		Assert::notNull($reloadedUser);
 		Assert::same(1, $reloadedUser->failedCount);
 		Assert::notNull($reloadedUser->lastAttemptAt);
@@ -52,10 +52,10 @@ test('authenticate throws not approved for blocked account', function () use ($a
 	$user = createTestAdminUser(password: 'correct-password-12345');
 
 	try {
-		$reloadedUser = testOrm()->adminUsers->getById($user->id);
+		$reloadedUser = testAdminOrm()->adminUsers->getById($user->id);
 		Assert::notNull($reloadedUser);
 		$reloadedUser->blockedUntil = (new DateTimeImmutable('now', new DateTimeZone('UTC')))->modify('+5 minutes');
-		testOrm()->persistAndFlush($reloadedUser);
+		testAdminOrm()->persistAndFlush($reloadedUser);
 
 		try {
 			$authenticator->authenticate($user->username, 'correct-password-12345');
@@ -73,11 +73,11 @@ test('authenticate succeeds and resets security counters', function () use ($aut
 	$user = createTestAdminUser(password: 'correct-password-12345');
 
 	try {
-		$reloadedUser = testOrm()->adminUsers->getById($user->id);
+		$reloadedUser = testAdminOrm()->adminUsers->getById($user->id);
 		Assert::notNull($reloadedUser);
 		$reloadedUser->failedCount = 4;
 		$reloadedUser->blockedUntil = (new DateTimeImmutable('now', new DateTimeZone('UTC')))->modify('-1 minute');
-		testOrm()->persistAndFlush($reloadedUser);
+		testAdminOrm()->persistAndFlush($reloadedUser);
 
 		$identity = $authenticator->authenticate($user->username, 'correct-password-12345');
 
@@ -86,7 +86,7 @@ test('authenticate succeeds and resets security counters', function () use ($aut
 		Assert::same($user->username, $identity->getData()['username']);
 		Assert::type('int', $identity->getData()['updatedAt']);
 
-		$finalUser = testOrm()->adminUsers->getById($user->id);
+		$finalUser = testAdminOrm()->adminUsers->getById($user->id);
 		Assert::notNull($finalUser);
 		Assert::same(0, $finalUser->failedCount);
 		Assert::null($finalUser->blockedUntil);

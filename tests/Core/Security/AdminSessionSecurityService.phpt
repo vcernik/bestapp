@@ -52,10 +52,10 @@ test('validateAndRefresh logs out when admin is disabled', function () use ($ser
 	$admin = createTestAdminUser(password: 'correct-password-12345');
 
 	try {
-		$managed = testOrm()->adminUsers->getById($admin->id);
+		$managed = testAdminOrm()->adminUsers->getById($admin->id);
 		Assert::notNull($managed);
 		$managed->enabled = false;
-		testOrm()->persistAndFlush($managed);
+		testAdminOrm()->persistAndFlush($managed);
 
 		loginAsAdminIdentity($user, $managed);
 		Assert::false($service->validateAndRefresh($user));
@@ -71,7 +71,7 @@ test('validateAndRefresh keeps session when updatedAt matches', function () use 
 	$admin = createTestAdminUser(password: 'correct-password-12345');
 
 	try {
-		$managed = testOrm()->adminUsers->getById($admin->id);
+		$managed = testAdminOrm()->adminUsers->getById($admin->id);
 		Assert::notNull($managed);
 		loginAsAdminIdentity($user, $managed);
 
@@ -93,14 +93,14 @@ test('validateAndRefresh refreshes identity when updatedAt changed', function ()
 	$admin = createTestAdminUser(password: 'correct-password-12345');
 
 	try {
-		$managed = testOrm()->adminUsers->getById($admin->id);
+		$managed = testAdminOrm()->adminUsers->getById($admin->id);
 		Assert::notNull($managed);
 		$oldTimestamp = $managed->updatedAt->getTimestamp();
 		loginAsAdminIdentity($user, $managed, $oldTimestamp - 120);
 
 		$managed->name = 'Updated Session Name';
 		$managed->updatedAt = (new DateTimeImmutable('now', new DateTimeZone('UTC')))->modify('+5 minutes');
-		testOrm()->persistAndFlush($managed);
+		testAdminOrm()->persistAndFlush($managed);
 
 		Assert::true($service->validateAndRefresh($user));
 		Assert::true($user->isLoggedIn());

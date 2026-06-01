@@ -6,6 +6,7 @@ parameters:
 extensions:
 	nextras.dbal: Nextras\Dbal\Bridges\NetteDI\DbalExtension
 	nextras.orm: Nextras\Orm\Bridges\NetteDI\OrmExtension
+	nextras.adminOrm: Nextras\Orm\Bridges\NetteDI\OrmExtension
 
 
 application:
@@ -34,6 +35,12 @@ nextras.dbal:
 
 nextras.orm:
 	model: App\Model\Orm\Orm
+
+
+nextras.adminOrm:
+	model: App\Admin\Model\Orm\AdminOrm
+	connection: @nextras.dbal.connection
+	autowiredInternalServices: false
 
 
 latte:

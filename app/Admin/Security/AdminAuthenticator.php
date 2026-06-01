@@ -2,7 +2,7 @@
 
 namespace App\Admin\Security;
 
-use App\Model\Orm\Orm;
+use App\Admin\Model\Orm\AdminOrm;
 use Nette\Security\AuthenticationException;
 use Nette\Security\Authenticator;
 use Nette\Security\IIdentity;
@@ -14,7 +14,7 @@ final class AdminAuthenticator implements Authenticator
 	private const int BLOCK_MINUTES = 10;
 
 	public function __construct(
-		private readonly Orm $orm,
+		private readonly AdminOrm $orm,
 		private readonly AdminUserManager $adminUserManager,
 		private readonly AdminActivityLogger $adminActivityLogger,
 	)

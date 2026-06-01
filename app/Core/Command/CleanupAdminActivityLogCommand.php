@@ -2,12 +2,12 @@
 
 namespace App\Core\Command;
 
-use App\Model\Orm\Orm;
+use App\Admin\Model\Orm\AdminOrm;
 
 final class CleanupAdminActivityLogCommand
 {
 	public function __construct(
-		private readonly Orm $orm,
+		private readonly AdminOrm $orm,
 	)
 	{
 	}

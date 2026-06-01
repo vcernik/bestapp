@@ -2,14 +2,14 @@
 
 namespace App\Core\Command;
 
+use App\Admin\Model\Orm\AdminOrm;
 use App\Admin\Model\Orm\AdminUser\AdminUser;
 use App\Admin\Security\AdminUserManager;
-use App\Model\Orm\Orm;
 
 final class SetAdminUserPasswordCommand
 {
 	public function __construct(
-		private readonly Orm $orm,
+		private readonly AdminOrm $orm,
 		private readonly AdminUserManager $adminUserManager,
 	)
 	{
