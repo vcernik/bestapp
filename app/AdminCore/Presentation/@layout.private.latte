@@ -5,6 +5,54 @@
 	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@contributte/datagrid@master/dist/datagrid-full.css">
 	<script defer src="https://cdn.jsdelivr.net/npm/@contributte/datagrid@master/dist/datagrid-full.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+			const menuToggleButton = document.getElementById('adminSidebarToggle');
+			const sidebarMenu = document.getElementById('adminSidebarMenu');
+			const largeScreenQuery = window.matchMedia('(min-width: 992px)');
+
+			if (!menuToggleButton || !sidebarMenu || typeof bootstrap === 'undefined') {
+				return;
+			}
+
+			const collapse = bootstrap.Collapse.getOrCreateInstance(sidebarMenu, { toggle: false});
+
+			const syncSidebarForViewport = () => {
+				if (largeScreenQuery.matches) {
+					sidebarMenu.classList.add('show');
+					menuToggleButton.setAttribute('aria-expanded', 'true');
+					return;
+				}
+
+				sidebarMenu.classList.remove('show');
+				menuToggleButton.setAttribute('aria-expanded', 'false');
+			};
+
+			syncSidebarForViewport();
+			largeScreenQuery.addEventListener('change', syncSidebarForViewport);
+
+			menuToggleButton.addEventListener('click', () => {
+				if (largeScreenQuery.matches) {
+					return;
+				}
+
+				if (sidebarMenu.classList.contains('show')) {
+					collapse.hide();
+					return;
+				}
+
+				collapse.show();
+			});
+
+			sidebarMenu.addEventListener('shown.bs.collapse', () => {
+				menuToggleButton.setAttribute('aria-expanded', 'true');
+			});
+
+			sidebarMenu.addEventListener('hidden.bs.collapse', () => {
+				menuToggleButton.setAttribute('aria-expanded', 'false');
+			});
+		});
+	</script>
 	<style>
 		.datagrid{
 			padding-left: 0;
@@ -22,13 +70,22 @@
 {block body}
 	<div class="min-vh-100 d-flex flex-column">
 		<div class="container-fluid px-0" style="flex: 1 1 auto;">
+			<div class="d-flex d-lg-none justify-content-between align-items-center border-bottom bg-light px-3 py-2">
+				<a n:href=":Admin:Home:default" class="d-flex align-items-center link-dark text-decoration-none">
+					<i class="fa-solid fa-shield-halved fs-4 me-2"></i>
+					<span class="fs-5">{$appName ?? 'Administrace'}</span>
+				</a>
+				<button id="adminSidebarToggle" class="btn btn-outline-secondary d-lg-none" type="button" aria-controls="adminSidebarMenu" aria-expanded="false" aria-label="Přepnout navigační menu">
+					<i class="fa-solid fa-bars" aria-hidden="true"></i>
+				</button>
+			</div>
 			<div class="row g-0 min-vh-lg-100">
-				<aside class="admin-sidebar col-12 col-lg-3 col-xl-2 border-end bg-light d-flex flex-column p-3">
-					<a n:href=":Admin:Home:default" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+				<aside id="adminSidebarMenu" class="admin-sidebar collapse col-12 col-lg-3 col-xl-2 border-end bg-light d-lg-flex flex-column p-3">
+					<a n:href=":Admin:Home:default" class="d-none d-lg-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
 						<i class="fa-solid fa-shield-halved fs-4 me-2"></i>
 						<span class="fs-5">{$appName ?? 'Administrace'}</span>
 					</a>
-					<hr>
+					<hr class="d-none d-lg-block">
 
 					<ul class="nav nav-pills flex-column mb-auto" aria-label="Hlavní menu administrace">
 						<li n:foreach="$adminMenuItems as $item" class="nav-item">
