@@ -25,10 +25,14 @@ final class TestPresenter extends BasePrivatePresenter
 
 	protected function createComponentArticlesGrid(): Datagrid
 	{
-		$grid = $this->datagridFactory->create();
+		$grid = $this->datagridFactory->createSortable('sortOrder', 'ASC');
 
-		$grid->setDataSource($this->articleRepository->findLatest());
-		$grid->setDefaultSort(['createdAt' => 'DESC']);
+		$grid->setDataSource($this->articleRepository->findAll());
+
+		$grid->setDefaultSort(['sortOrder' => 'ASC']);
+
+		$grid->addColumnNumber('sortOrder', 'Pořadí')
+			->setSortable();		
 
 		$grid->addColumnNumber('id', 'ID')
 			->setSortable();
@@ -42,6 +46,27 @@ final class TestPresenter extends BasePrivatePresenter
 			->setSortable();
 
 		return $grid;
+	}
+
+	public function handleSort(?int $item_id = null, ?int $prev_id = null, ?int $next_id = null): void
+	{
+		/** @var Datagrid $grid */
+		$grid = $this['articlesGrid'];
+
+		if ($item_id === null) {
+			$grid->reload();
+			return;
+		}
+
+		$reordered = $this->articleRepository->reorderByIds($item_id, $prev_id, $next_id);
+
+		if (! $reordered) {
+			$this->flashMessage('Článek se nepodařilo přesunout.', 'danger');
+			$grid->reload();
+			return;
+		}
+
+		$grid->reload();
 	}
 
 	public function renderDefault(): void

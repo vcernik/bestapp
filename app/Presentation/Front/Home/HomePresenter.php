@@ -18,7 +18,7 @@ final class HomePresenter extends Nette\Application\UI\Presenter
 	public function renderDefault(): void
 	{
 		$this->template->articles = $this->articleRepository
-			->findLatest()
+			->findOrdered()
 			->fetchAll();
 	}
 }
