@@ -22,27 +22,6 @@ final class HomePresenter extends BasePrivatePresenter
 		$this->addBreadcrumb('Dashboard');
 	}
 
-	protected function createComponentArticlesGrid(): Datagrid
-	{
-		$grid = $this->datagridFactory->create();
-
-		$grid->setDataSource($this->articleRepository->findLatest());
-		$grid->setDefaultSort(['createdAt' => 'DESC']);
-
-		$grid->addColumnNumber('id', 'ID')
-			->setSortable();
-
-		$grid->addColumnText('title', 'Titulek')
-			->setSortable()
-			->setFilterText();
-
-		$grid->addColumnDateTime('createdAt', 'Vytvoreno')
-			->setFormat('j. n. Y H:i')
-			->setSortable();
-
-		return $grid;
-	}
-
 	public function renderDefault(): void
 	{
 	}

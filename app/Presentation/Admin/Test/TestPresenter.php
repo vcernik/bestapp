@@ -19,7 +19,8 @@ final class TestPresenter extends BasePrivatePresenter
 	protected function startup(): void
 	{
 		parent::startup();
-		$this->addBreadcrumb('Dashboard');
+		$this->addBreadcrumb('Správa obsahu');
+		$this->addBreadcrumb('Články');
 	}
 
 	protected function createComponentArticlesGrid(): Datagrid
