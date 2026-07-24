@@ -29,7 +29,7 @@ abstract class BasePublicPresenter extends Nette\Application\UI\Presenter
 	}
 
 	/**
-	 * @return list<string>
+	 * @return non-empty-list<string>
 	 */
 	public function formatLayoutTemplateFiles(): array
 	{

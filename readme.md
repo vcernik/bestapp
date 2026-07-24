@@ -9,7 +9,7 @@ Pro spouštění PHP skriptů v projektu používej `ddev php ...`.
 
 Adminer: https://bestapp.ddev.site:9101/
 
-PHPstan: `ddev composer phpstan app --level 4`
+PHPstan: `ddev php vendor/bin/phpstan`
 
 
 # Vite - assets build
@@ -29,8 +29,6 @@ Alternativně lze použít Composer script:
 `ddev composer tester`
 
 # Nextras ORM + migrace
-Šablona lokální konfigurace je v `config/local.example.neon`.
-Lokální DB přístupy patří do `config/local.neon` (soubor je v `.gitignore`, tedy neverzovaný).
 
 Migrace (SQL) jsou v adresáři `migrations/`:
 - `structures/` - schéma databáze
@@ -38,18 +36,27 @@ Migrace (SQL) jsou v adresáři `migrations/`:
 - `dummy-data/` - volitelná testovací data (např. demo `article` seed)
 
 Spuštění migrací (produkce / minimum):
-`ddev php bin/migrations.php structures basic-data`
+```bash
+ddev php bin/migrations.php structures basic-data`
+```
 
 Spuštění migrací (vývoj s demo daty):
-`ddev php bin/migrations.php structures basic-data dummy-data`
+```bash
+ddev php bin/migrations.php structures basic-data dummy-data`
+```
 
 Reset DB a kompletní znovunahrání:
-`ddev php bin/migrations.php structures basic-data dummy-data --reset`
+```bash
+ddev php bin/migrations.php structures basic-data dummy-data --reset`
+```
 
 
 
-# Admin
-Create new user: `ddev php app/AdminCore/bin/admin.php admin:user:create`
+# Admin CLI
 
-Neinteraktivně lze použít parametry:
-`ddev php app/AdminCore/bin/admin.php admin:user:create --username=admin --name="Admin User" --password="very-strong-password"`
+```bash
+ddev php bin/admin.php admin:user:create
+ddev php bin/admin.php admin:user:set-password --username=admin --password="new-strong-password"
+ddev php bin/admin.php admin:activity-log:cleanup --older-than="6 months"
+
+```

@@ -8,13 +8,20 @@ use Nextras\Migrations\Extensions\SqlHandler;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+$container = (new App\Bootstrap())->bootWebApplication();
+
+/** @var array<string, mixed> $parameters */
+$parameters = $container->getParameters();
+/** @var array<string, mixed> $dbParameters */
+$dbParameters = is_array($parameters['db'] ?? null) ? $parameters['db'] : [];
+
 $connection = new Connection([
 	'driver' => 'mysqli',
-	'host' => getenv('DB_HOST') ?: 'db',
-	'port' => (int) (getenv('DB_PORT') ?: 3306),
-	'database' => getenv('DB_NAME') ?: 'db',
-	'username' => getenv('DB_USER') ?: 'db',
-	'password' => getenv('DB_PASSWORD') ?: 'db',
+	'host' => (string) ($dbParameters['host'] ?? 'db'),
+	'port' => (int) ($dbParameters['port'] ?? 3306),
+	'database' => (string) ($dbParameters['name'] ?? 'db'),
+	'username' => (string) ($dbParameters['user'] ?? 'db'),
+	'password' => (string) ($dbParameters['password'] ?? 'db'),
 ]);
 
 $dbal = new NextrasAdapter($connection);

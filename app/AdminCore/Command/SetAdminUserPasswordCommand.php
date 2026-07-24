@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Core\Command;
+namespace App\AdminCore\Command;
 
 use App\AdminCore\Model\Orm\AdminOrm;
 use App\AdminCore\Model\Orm\AdminUser\AdminUser;

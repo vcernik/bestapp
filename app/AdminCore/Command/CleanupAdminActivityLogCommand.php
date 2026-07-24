@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Core\Command;
+namespace App\AdminCore\Command;
 
 use App\AdminCore\Model\Orm\AdminOrm;
 
@@ -15,10 +15,6 @@ final class CleanupAdminActivityLogCommand
 	public function execute(string $olderThanExpression): int
 	{
 		$interval = \DateInterval::createFromDateString($olderThanExpression);
-		if ($interval === false) {
-			throw new \RuntimeException('Invalid --older-than value.');
-		}
-
 		$threshold = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->sub($interval);
 		$toDelete = $this->orm->adminActivityLogs->findOlderThan($threshold);
 

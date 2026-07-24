@@ -46,6 +46,20 @@ final class DatagridFactory
 	{
 		$grid = new Datagrid;
 		$grid->setTranslator($this->translator);
+		$grid->setRememberState(false);
+
+		return $grid;
+	}
+
+	/**
+	 * Konfiguruje datagrid pro drag-and-drop řazení.
+	 * Presenter musí implementovat handleSort($item_id, $prev_id, $next_id).
+	 */
+	public function createSortable(string $sortColumn = 'sortOrder', string $defaultSort = 'ASC'): Datagrid
+	{
+		$grid = $this->create();
+		$grid->setDefaultSort([$sortColumn => $defaultSort]);
+		$grid->setSortable();
 
 		return $grid;
 	}

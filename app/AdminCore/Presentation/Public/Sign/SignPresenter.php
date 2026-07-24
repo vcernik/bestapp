@@ -6,10 +6,14 @@ use App\AdminCore\Presentation\Accessory\BootstrapFormFactory;
 use App\AdminCore\Presentation\Public\Accessory\BasePublicPresenter;
 use App\AdminCore\Security\AdminActivityLogger;
 use Nette;
+use Nette\Application\Attributes\Persistent;
 use Nette\Application\UI\Form;
 
 final class SignPresenter extends BasePublicPresenter
 {
+	#[Persistent]
+	public string $backlink = '';
+
 	public function __construct(
 		private readonly BootstrapFormFactory $bootstrapFormFactory,
 		private readonly AdminActivityLogger $adminActivityLogger,
@@ -49,7 +53,7 @@ final class SignPresenter extends BasePublicPresenter
 	}
 
 	/**
-	 * @return list<string>
+	 * @return non-empty-list<string>
 	 */
 	public function formatTemplateFiles(): array
 	{
@@ -61,6 +65,7 @@ final class SignPresenter extends BasePublicPresenter
 		try {
 			$this->getUser()->login($values->username, $values->password);
 			$this->flashMessage('Přihlášení proběhlo úspěšně.', 'success');
+			$this->restoreRequest($this->backlink);
 			$this->redirect(':Admin:Home:default');
 		} catch (Nette\Security\AuthenticationException $exception) {
 			$this['signInForm']->addError('Zkontrolujte své uživatelské jméno nebo heslo.');

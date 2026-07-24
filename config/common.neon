@@ -61,3 +61,6 @@ di:
 	export:
 		parameters: yes
 		tags: no
+
+tracy:
+	email: 'vaclav+support@cernik.name'

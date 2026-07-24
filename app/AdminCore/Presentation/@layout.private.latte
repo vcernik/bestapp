@@ -1,72 +1,5 @@
 {layout '@layout.base.latte'}
 
-{block head}
-	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css">
-	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/@contributte/datagrid@master/dist/datagrid-full.css">
-	<script defer src="https://cdn.jsdelivr.net/npm/@contributte/datagrid@master/dist/datagrid-full.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/js/bootstrap.bundle.min.js"></script>
-	<script>
-		document.addEventListener('DOMContentLoaded', () => {
-			const menuToggleButton = document.getElementById('adminSidebarToggle');
-			const sidebarMenu = document.getElementById('adminSidebarMenu');
-			const largeScreenQuery = window.matchMedia('(min-width: 992px)');
-
-			if (!menuToggleButton || !sidebarMenu || typeof bootstrap === 'undefined') {
-				return;
-			}
-
-			const collapse = bootstrap.Collapse.getOrCreateInstance(sidebarMenu, { toggle: false});
-
-			const syncSidebarForViewport = () => {
-				if (largeScreenQuery.matches) {
-					sidebarMenu.classList.add('show');
-					menuToggleButton.setAttribute('aria-expanded', 'true');
-					return;
-				}
-
-				sidebarMenu.classList.remove('show');
-				menuToggleButton.setAttribute('aria-expanded', 'false');
-			};
-
-			syncSidebarForViewport();
-			largeScreenQuery.addEventListener('change', syncSidebarForViewport);
-
-			menuToggleButton.addEventListener('click', () => {
-				if (largeScreenQuery.matches) {
-					return;
-				}
-
-				if (sidebarMenu.classList.contains('show')) {
-					collapse.hide();
-					return;
-				}
-
-				collapse.show();
-			});
-
-			sidebarMenu.addEventListener('shown.bs.collapse', () => {
-				menuToggleButton.setAttribute('aria-expanded', 'true');
-			});
-
-			sidebarMenu.addEventListener('hidden.bs.collapse', () => {
-				menuToggleButton.setAttribute('aria-expanded', 'false');
-			});
-		});
-	</script>
-	<style>
-		.datagrid{
-			padding-left: 0;
-			padding-right: 0;
-		}
-
-		@media (min-width: 992px) {
-			.min-vh-lg-100 {
-				min-height: 100vh;
-			}
-		}
-	</style>
-{/block}
-
 {block body}
 	<div class="min-vh-100 d-flex flex-column">
 		<div class="container-fluid px-0" style="flex: 1 1 auto;">
@@ -87,26 +20,57 @@
 					</a>
 					<hr class="d-none d-lg-block">
 
-					<ul class="nav nav-pills flex-column mb-auto" aria-label="Hlavní menu administrace">
+					<ul class="nav nav-pills flex-column mb-lg-2" aria-label="Hlavní menu administrace">
 						<li n:foreach="$adminMenuItems as $item" class="nav-item">
 							{if isset($item['items'])}
 								{var $hasActiveChild = false}
 								{foreach $item['items'] as $child}
-									{if isset($child['destination']) && $presenter->isLinkCurrent($child['destination'], $child['params'] ?? [])}
+									{var $childParams = $child['params'] ?? []}
+									{var $childPresenterDestination = isset($child['destination']) ? preg_replace('~:[^:]+$~', ':*', $child['destination']) : null}
+									{var $isChildCurrent = isset($child['destination']) && ($presenter->isLinkCurrent($child['destination'], $childParams) || ($childPresenterDestination !== null && $presenter->isLinkCurrent($childPresenterDestination, $childParams)))}
+									{if $isChildCurrent}
 										{var $hasActiveChild = true}
 									{/if}
 								{/foreach}
-								<div class="nav-link text-secondary fw-semibold {*$hasActiveChild ? 'active' : 'link-dark'*}">{$item['name']}</div>
-								<ul class="nav nav-pills flex-column ms-3 mb-2" aria-label="Podmenu {$item['name']}">
-									<li n:foreach="$item['items'] as $child" class="nav-item">
-										<a n:if="isset($child['destination'])" n:href="$child['destination'], ...($child['params'] ?? [])" class="nav-link py-1 {$presenter->isLinkCurrent($child['destination'], $child['params'] ?? []) ? 'active' : 'link-dark'}" aria-current="{$presenter->isLinkCurrent($child['destination'], $child['params'] ?? []) ? 'page' : null}">
-											{$child['name']}
-										</a>
-										<span n:if="!isset($child['destination'])" class="nav-link py-1 link-secondary">{$child['name']}</span>
-									</li>
-								</ul>
+								{var $isCollapsible = $item['collapsible'] ?? false}
+								{if $isCollapsible}
+									{var $collapseId = 'adminMenuCollapse-' . $iterator->counter}
+									<button type="button" class="nav-link w-100 border-0 bg-transparent text-start d-flex align-items-center justify-content-between {$hasActiveChild ? 'active' : 'text-secondary fw-semibold'}" data-bs-toggle="collapse" data-bs-target="#{$collapseId}" aria-controls="{$collapseId}" aria-expanded="{$hasActiveChild ? 'true' : 'false'}">
+										<span>{$item['name']}</span>
+										<i class="fa-solid fa-chevron-down small ms-2" aria-hidden="true"></i>
+									</button>
+									<div id="{$collapseId}" class="collapse {if $hasActiveChild}show{/if}">
+										<ul class="nav nav-pills flex-column ms-3 mb-2" aria-label="Podmenu {$item['name']}">
+											<li n:foreach="$item['items'] as $child" class="nav-item">
+												{var $childParams = $child['params'] ?? []}
+												{var $childPresenterDestination = isset($child['destination']) ? preg_replace('~:[^:]+$~', ':*', $child['destination']) : null}
+												{var $isChildCurrent = isset($child['destination']) && ($presenter->isLinkCurrent($child['destination'], $childParams) || ($childPresenterDestination !== null && $presenter->isLinkCurrent($childPresenterDestination, $childParams)))}
+												<a n:if="isset($child['destination'])" n:href="$child['destination'], ...$childParams" class="nav-link py-1 {$isChildCurrent ? 'active' : 'link-dark'}" aria-current="{$isChildCurrent ? 'page' : null}">
+													{$child['name']}
+												</a>
+												<span n:if="!isset($child['destination'])" class="nav-link py-1 link-secondary">{$child['name']}</span>
+											</li>
+										</ul>
+									</div>
+								{else}
+									<div class="nav-link text-secondary fw-semibold">{$item['name']}</div>
+									<ul class="nav nav-pills flex-column ms-3 mb-2" aria-label="Podmenu {$item['name']}">
+										<li n:foreach="$item['items'] as $child" class="nav-item">
+											{var $childParams = $child['params'] ?? []}
+											{var $childPresenterDestination = isset($child['destination']) ? preg_replace('~:[^:]+$~', ':*', $child['destination']) : null}
+											{var $isChildCurrent = isset($child['destination']) && ($presenter->isLinkCurrent($child['destination'], $childParams) || ($childPresenterDestination !== null && $presenter->isLinkCurrent($childPresenterDestination, $childParams)))}
+											<a n:if="isset($child['destination'])" n:href="$child['destination'], ...$childParams" class="nav-link py-1 {$isChildCurrent ? 'active' : 'link-dark'}" aria-current="{$isChildCurrent ? 'page' : null}">
+												{$child['name']}
+											</a>
+											<span n:if="!isset($child['destination'])" class="nav-link py-1 link-secondary">{$child['name']}</span>
+										</li>
+									</ul>
+								{/if}
 							{else}
-								<a n:if="isset($item['destination'])" n:href="$item['destination'], ...($item['params'] ?? [])" class="nav-link {$presenter->isLinkCurrent($item['destination'], $item['params'] ?? []) ? 'active' : 'link-dark'}" aria-current="{$presenter->isLinkCurrent($item['destination'], $item['params'] ?? []) ? 'page' : null}">
+								{var $itemParams = $item['params'] ?? []}
+								{var $itemPresenterDestination = isset($item['destination']) ? preg_replace('~:[^:]+$~', ':*', $item['destination']) : null}
+								{var $isItemCurrent = isset($item['destination']) && ($presenter->isLinkCurrent($item['destination'], $itemParams) || ($itemPresenterDestination !== null && $presenter->isLinkCurrent($itemPresenterDestination, $itemParams)))}
+								<a n:if="isset($item['destination'])" n:href="$item['destination'], ...$itemParams" class="nav-link {$isItemCurrent ? 'active' : 'link-dark'}" aria-current="{$isItemCurrent ? 'page' : null}">
 									{$item['name']}
 								</a>
 							{/if}
@@ -117,7 +81,7 @@
 					<div class="dropdown">
 						<a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="adminSidebarUser" data-bs-toggle="dropdown" aria-expanded="false">
 							<i class="fa-solid fa-user-circle fs-4 me-2" aria-hidden="true"></i>
-							<strong>{$currentUser->name ?? $currentUser->username ?? 'Správce'}</strong>
+							{$currentUser->name ?? $currentUser->username ?? 'Správce'}
 						</a>
 						<ul class="dropdown-menu text-small shadow" aria-labelledby="adminSidebarUser">
 							<li><a class="dropdown-item" n:href=":AdminCore:Profile:default">Změna hesla</a></li>
@@ -130,8 +94,8 @@
 					{block breadcrumbs}
 					<nav aria-label="breadcrumb" class="mb-3">
 						<ol class="breadcrumb mb-0 small">
-							<li n:foreach="$breadcrumbs as $item" class="breadcrumb-item {if $item['link'] === null}active{/if}" aria-current="{if $item['link'] === null}page{/if}">
-								{if $item['link'] !== null}
+							<li n:foreach="$breadcrumbs as $item" class="breadcrumb-item {if $iterator->isLast()}active{/if}" aria-current="{if $iterator->isLast()}page{/if}" >
+								{if $item['link'] !== null && !$iterator->isLast()}
 									<a n:href="$item['link']" class="text-decoration-none">{$item['title']}</a>
 								{else}
 									{$item['title']}
@@ -141,7 +105,9 @@
 					</nav>
 					{/block}
 					<div class="my-3">
-						<div n:foreach="$flashes as $flash" class="alert alert-{$flash->type ?: 'info'} mb-2" role="alert">{$flash->message}</div>
+						{snippet flashes}
+							<div n:foreach="$flashes as $flash" class="alert alert-{$flash->type ?: 'info'} mb-2" role="alert">{$flash->message}</div>
+						{/snippet}
 					</div>
 					{if isset($pageTitle)}
 						<h3 class="h3 my-4" n:block="title">{$pageTitle}</h3>

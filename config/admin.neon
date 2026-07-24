@@ -5,6 +5,7 @@ parameters:
 			- name: Přehled
 				link: ':Admin:Home:default'
 			- name: Správa obsahu
+				collapsible: true
 				items:
 					- name: Články
 						link: ':Admin:Test:default'

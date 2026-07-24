@@ -6,14 +6,12 @@
 		<table class="w-full table-auto text-left">
 			<thead class="bg-slate-100 text-sm text-slate-700">
 				<tr>
-					<th class="px-4 py-3 font-semibold">ID</th>
 					<th class="px-4 py-3 font-semibold">Title</th>
 					<th class="px-4 py-3 font-semibold">Created</th>
 				</tr>
 			</thead>
 			<tbody class="divide-y divide-slate-100 text-sm">
 				<tr n:foreach="$articles as $article" class="hover:bg-slate-50">
-					<td class="px-4 py-3 text-slate-500">{$article->id}</td>
 					<td class="px-4 py-3 font-medium text-slate-900">{$article->title}</td>
 					<td class="px-4 py-3 text-slate-600">{$article->createdAt|date:'j. n. Y H:i'}</td>
 				</tr>

@@ -2,6 +2,7 @@
 
 namespace App\AdminCore\Presentation\Accessory;
 
+use App\AdminCore\Security\AdminActivityLogger;
 use App\AdminCore\Security\AdminSessionSecurityService;
 use Nette;
 use Nette\Bridges\SecurityHttp\SessionStorage;
@@ -20,6 +21,9 @@ abstract class BasePrivatePresenter extends Nette\Application\UI\Presenter
 	#[Inject]
 	public AdminSessionSecurityService $adminSessionSecurityService;
 
+	#[Inject]
+	public AdminActivityLogger $adminActivityLogger;
+
 	protected function startup(): void
 	{
 		parent::startup();
@@ -31,13 +35,13 @@ abstract class BasePrivatePresenter extends Nette\Application\UI\Presenter
 		$this->getUser()->setExpiration('3 hours', true);
 
 		if (!$this->getUser()->isLoggedIn()) {
-			$this->flashMessage('Relace vypršela nebo nejste přihlášen(a). Přihlaste se prosím znovu.', 'info');
-			$this->redirect(':AdminCore:Public:Sign:in');
+			$this->flashMessage('Přihlaste se, prosím.', 'info');
+			$this->redirect(':AdminCore:Public:Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 
 		if (!$this->adminSessionSecurityService->validateAndRefresh($this->getUser())) {
 			$this->flashMessage(AdminSessionSecurityService::FORCED_LOGOUT_MESSAGE, 'warning');
-			$this->redirect(':AdminCore:Public:Sign:in');
+			$this->redirect(':AdminCore:Public:Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 
 		$this->breadcrumbs = [];
@@ -64,7 +68,16 @@ abstract class BasePrivatePresenter extends Nette\Application\UI\Presenter
 	}
 
 	/**
-	 * @return list<string>
+	 * @param array<string, scalar|array<array-key, scalar|null>|null> $data
+	 */
+	protected function logAdminActivity(string $action, array $data = []): void
+	{
+		$userId = $this->getUser()->getId();
+		$this->adminActivityLogger->log(is_int($userId) ? $userId : null, $action, $data);
+	}
+
+	/**
+	 * @return non-empty-list<string>
 	 */
 	public function formatLayoutTemplateFiles(): array
 	{

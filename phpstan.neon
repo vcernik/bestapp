@@ -1,0 +1,14 @@
+parameters:
+	level: 8
+	phpVersion: 80422
+
+	tmpDir: %currentWorkingDirectory%/temp/phpstan
+
+	paths:
+		- app
+		- tests
+
+	fileExtensions:
+		- php
+
+	ignoreErrors:

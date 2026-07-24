@@ -4,7 +4,7 @@ Modulární webová aplikace postavená na Nette frameworku s Nextras ORM, Vite 
 
 ## Stack
 
-- **PHP 8.2+**, Nette (application, DI, forms, database, security, …), Latte šablony
+- **PHP 8.4+**, Nette (application, DI, forms, database, security, …), Latte šablony
 - **Nextras ORM + DBAL** – přístup k databázi přes entity
 - **Nextras Migrations** – správa schématu DB pomocí SQL souborů
 - **Vite + Tailwind CSS + Nette Assets** – sestavení frontendových assetů
@@ -20,11 +20,11 @@ app/
   Bootstrap.php                       # inicializace Nette DI kontejneru
   Core/
     RouterFactory.php                 # definice routeru (Front + Admin + AdminCore)
-    Command/                          # aplikační commandy (např. admin user management)
   Model/
     Orm/                              # Nextras ORM entity, repozitáře, mappery
   Presentation/                       # Front/Admin/Error presentery a Latte šablony
   AdminCore/
+    Command/                          # aplikační commandy (např. admin user management)
     Presentation/                     # nový admin modul (App\AdminCore\Presentation\...)
     Model/
     Security/
@@ -71,17 +71,13 @@ ddev php bin/migrations.php structures basic-data dummy-data          # vývoj
 ddev php bin/migrations.php structures basic-data dummy-data --reset  # reset DB
 
 # Statická analýza
-ddev composer phpstan app --level 4
+ddev php vendor/bin/phpstan
 
 # Testy
 ddev php vendor/bin/tester tests -s
 ddev php vendor/bin/tester tests/Core/RouterFactory.phpt -s
 ddev composer tester
 
-# Admin CLI
-ddev php bin/admin.php admin:user:create
-ddev php bin/admin.php admin:user:set-password --username=admin --password="new-strong-password"
-ddev php bin/admin.php admin:activity-log:cleanup --older-than="6 months"
 ```
 
 ## Konvence

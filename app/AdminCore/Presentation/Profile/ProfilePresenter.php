@@ -59,7 +59,7 @@ final class ProfilePresenter extends BasePrivatePresenter
 	}
 
 	/**
-	 * @return list<string>
+	 * @return non-empty-list<string>
 	 */
 	public function formatTemplateFiles(): array
 	{

@@ -4,30 +4,30 @@ namespace App\AdminCore\Presentation\Accessory;
 
 use InvalidArgumentException;
 
+/**
+ * @phpstan-type AdminMenuChild array{name: string, destination?: string, params?: array<string, scalar|null>, items?: list<mixed>, collapsible?: bool}
+ * @phpstan-type AdminMenuItem array{name: string, destination?: string, params?: array<string, scalar|null>, items?: list<AdminMenuChild>, collapsible?: bool}
+ */
 final class AdminMenuProvider
 {
-	/**
-	 * @var list<array{name: string, destination?: string, params?: array<string, scalar|null>, items?: list<array{name: string, destination?: string, params?: array<string, scalar|null>, items?: list<mixed>}>}>
-	 */
+	/** @var list<AdminMenuItem> */
 	private array $items;
 
 	private readonly string $appName;
 
 	/**
-	 * @param array<int, array{name?: mixed, link?: mixed, items?: mixed}> $items
+	 * @param array<int, array{name?: mixed, link?: mixed, items?: mixed, collapsible?: mixed}> $items
 	 */
 	public function __construct(string $appName, array $items)
 	{
 		$this->appName = $appName;
-		$this->items = array_map(
+		$this->items = array_values(array_map(
 			fn (array $item): array => $this->normalizeItem($item),
 			$items,
-		);
+		));
 	}
 
-	/**
-	 * @return list<array{name: string, destination?: string, params?: array<string, scalar|null>, items?: list<array{name: string, destination?: string, params?: array<string, scalar|null>, items?: list<mixed>}>}>
-	 */
+	/** @return list<AdminMenuItem> */
 	public function getItems(): array
 	{
 		return $this->items;
@@ -39,8 +39,8 @@ final class AdminMenuProvider
 	}
 
 	/**
-	 * @param array{name?: mixed, link?: mixed, items?: mixed} $item
-	 * @return array{name: string, destination?: string, params?: array<string, scalar|null>, items?: list<array{name: string, destination?: string, params?: array<string, scalar|null>, items?: list<mixed>}>>
+	 * @param array{name?: mixed, link?: mixed, items?: mixed, collapsible?: mixed} $item
+	 * @return AdminMenuItem
 	 */
 	private function normalizeItem(array $item): array
 	{
@@ -70,6 +70,14 @@ final class AdminMenuProvider
 				$items,
 				array_keys($items),
 			);
+		}
+
+		if (array_key_exists('collapsible', $item)) {
+			if (!is_bool($item['collapsible'])) {
+				throw new InvalidArgumentException(sprintf('Admin menu item "%s" must define "collapsible" as bool.', $name));
+			}
+
+			$result['collapsible'] = $item['collapsible'];
 		}
 
 		if (!isset($result['destination']) && !isset($result['items'])) {
@@ -119,7 +127,7 @@ final class AdminMenuProvider
 
 	/**
 	 * @param mixed $child
-	 * @return array{name: string, destination?: string, params?: array<string, scalar|null>, items?: list<array{name: string, destination?: string, params?: array<string, scalar|null>, items?: list<mixed>}>>
+	 * @return AdminMenuChild
 	 */
 	private function normalizeChildItem(string $parentName, mixed $child, int $index): array
 	{

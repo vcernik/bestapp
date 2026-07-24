@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
 use App\Bootstrap;
-use App\Core\Command\CleanupAdminActivityLogCommand;
-use App\Core\Command\CreateAdminUserCommand;
-use App\Core\Command\SetAdminUserPasswordCommand;
+use App\AdminCore\Command\CleanupAdminActivityLogCommand;
+use App\AdminCore\Command\CreateAdminUserCommand;
+use App\AdminCore\Command\SetAdminUserPasswordCommand;
 
 require __DIR__ . '/../../../vendor/autoload.php';
 
