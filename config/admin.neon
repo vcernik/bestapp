@@ -24,7 +24,7 @@ parameters:
 					- resource: Admin:Test2
 						privileges: [default]
 					- resource: AdminCore:Profile
-						privileges: [default]
+						privileges: [*]
 				tester:
 					- resource: Admin:Home
 						privileges: [default]

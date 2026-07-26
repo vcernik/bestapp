@@ -6,6 +6,7 @@ use App\AdminCore\Model\Orm\AdminUser\AdminUser;
 use App\AdminCore\Presentation\Accessory\BasePrivatePresenter;
 use App\AdminCore\Presentation\Accessory\BootstrapFormFactory;
 use App\AdminCore\Presentation\Accessory\DatagridFactory;
+use App\AdminCore\Security\AdminRolePermissionOverview;
 use App\AdminCore\Security\AdminUserManager;
 use App\AdminCore\Security\AdminUsersAdministrationFacade;
 use Contributte\Datagrid\Datagrid;
@@ -23,6 +24,7 @@ final class UsersPresenter extends BasePrivatePresenter
 		private readonly DatagridFactory $datagridFactory,
 		private readonly AdminUsersAdministrationFacade $adminUsersAdministrationFacade,
 		private readonly AdminUserManager $adminUserManager,
+		private readonly AdminRolePermissionOverview $adminRolePermissionOverview,
 	)
 	{
 	}
@@ -50,6 +52,7 @@ final class UsersPresenter extends BasePrivatePresenter
 
 	public function renderDefault(): void
 	{
+		$this->template->rolePermissionOverview = $this->adminRolePermissionOverview->getRoles();
 	}
 
 	public function renderCreate(): void
@@ -202,18 +205,18 @@ final class UsersPresenter extends BasePrivatePresenter
 
 		$form->addSelect('role', 'Role', $roles)
 			->setRequired('Vyberte roli.')
-			->setDefaultValue($editedUser?->role ?? $this->adminUserManager->getDefaultRole());
+			->setDefaultValue($editedUser->role ?? $this->adminUserManager->getDefaultRole());
 
 		$form->addText('username', 'Uživatelské jméno')
 			->setRequired('Vyplňte uživatelské jméno.')
-			->setDefaultValue($editedUser?->username ?? '');
+			->setDefaultValue($editedUser->username ?? '');
 
 		$form->addText('name', 'Jméno')
 			->setRequired('Vyplňte jméno.')
-			->setDefaultValue($editedUser?->name ?? '');
+			->setDefaultValue($editedUser->name ?? '');
 
 		$form->addCheckbox('enabled', 'Uživatel je aktivní')
-			->setDefaultValue($editedUser?->enabled ?? true);
+			->setDefaultValue($editedUser->enabled ?? true);
 
 		$form->addPassword('newPassword', $passwordLabel);
 		$form->addPassword('newPasswordConfirm', 'Nové heslo znovu');

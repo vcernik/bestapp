@@ -3,4 +3,37 @@
 		<a n:href="create" class="btn btn-primary mb-3">Nový uživatel</a>
 	</p>
 	{control usersGrid}
+
+	<div class="mt-4">
+		<h2 class="h5 mb-3">Dostupné role a oprávnění</h2>
+		<div class="table-responsive">
+			<table class="table table-sm table-bordered align-middle mb-0">
+				<thead class="table-light">
+					<tr>
+						<th scope="col">Role</th>
+						<th scope="col">Sekce</th>
+						<th scope="col">Oprávnění</th>
+					</tr>
+				</thead>
+				<tbody>
+					{foreach $rolePermissionOverview as $roleOverview}
+						{if $roleOverview['permissions'] === []}
+							<tr>
+								<th scope="row">{$roleOverview['role']}</th>
+								<td colspan="2" class="text-body-secondary">Bez oprávnění</td>
+							</tr>
+						{else}
+							{foreach $roleOverview['permissions'] as $permission}
+								<tr>
+									<th n:if="$iterator->first" scope="row" rowspan="{count($roleOverview['permissions'])}">{$roleOverview['role']}</th>
+									<td>{$permission['resource']}</td>
+									<td>{$permission['privileges']}</td>
+								</tr>
+							{/foreach}
+						{/if}
+					{/foreach}
+				</tbody>
+			</table>
+		</div>
+	</div>
 {/block}
