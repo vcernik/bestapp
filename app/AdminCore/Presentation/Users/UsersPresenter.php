@@ -85,8 +85,7 @@ final class UsersPresenter extends BasePrivatePresenter
 				->setText($user->enabled ? 'Aktivní' : 'Zakázaný'))
 			->setSortable();
 
-		$grid->addAction('edit', 'Upravit', 'edit')
-			->setClass('btn btn-sm btn-outline-primary');
+		$grid->addAction('edit', 'Upravit', 'edit');
 
 		return $grid;
 	}

@@ -13,14 +13,14 @@
 				</button>
 			</div>
 			<div class="row g-0 min-vh-lg-100">
-				<aside id="adminSidebarMenu" class="admin-sidebar collapse col-12 col-lg-3 col-xl-2 border-end bg-light d-lg-flex flex-column p-3">
-					<a n:href=":Admin:Home:default" class="d-none d-lg-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+				<aside id="adminSidebarMenu" class="admin-sidebar collapse col-12 col-lg-3 col-xl-2 d-lg-flex flex-column">
+					<a n:href=":Admin:Home:default" class="admin-sidebar-brand d-none d-lg-flex align-items-center text-decoration-none">
 						<i class="fa-solid fa-shield-halved fs-4 me-2"></i>
 						<span class="fs-5">{$appName ?? 'Administrace'}</span>
 					</a>
 					<hr class="d-none d-lg-block">
 
-					<ul class="nav nav-pills flex-column mb-lg-2" aria-label="Hlavní menu administrace">
+					<ul class="nav nav-pills flex-column mb-4" aria-label="Hlavní menu administrace">
 						<li n:foreach="$adminMenuItems as $item" class="nav-item">
 							{if isset($item['items'])}
 								{var $hasActiveChild = false}
@@ -35,12 +35,12 @@
 								{var $isCollapsible = $item['collapsible'] ?? false}
 								{if $isCollapsible}
 									{var $collapseId = 'adminMenuCollapse-' . $iterator->counter}
-									<button type="button" class="nav-link w-100 border-0 bg-transparent text-start d-flex align-items-center justify-content-between {$hasActiveChild ? 'active' : 'text-secondary fw-semibold'}" data-bs-toggle="collapse" data-bs-target="#{$collapseId}" aria-controls="{$collapseId}" aria-expanded="{$hasActiveChild ? 'true' : 'false'}">
+									<button type="button" class="nav-link w-100 border-0 bg-transparent text-start d-flex align-items-center justify-content-between {$hasActiveChild ? 'is-open' : 'text-secondary'}" data-bs-toggle="collapse" data-bs-target="#{$collapseId}" aria-controls="{$collapseId}" aria-expanded="{$hasActiveChild ? 'true' : 'false'}">
 										<span>{$item['name']}</span>
 										<i class="fa-solid fa-chevron-down small ms-2" aria-hidden="true"></i>
 									</button>
 									<div id="{$collapseId}" class="collapse {if $hasActiveChild}show{/if}">
-										<ul class="nav nav-pills flex-column ms-3 mb-2" aria-label="Podmenu {$item['name']}">
+										<ul class="nav nav-pills flex-column ms-3" aria-label="Podmenu {$item['name']}">
 											<li n:foreach="$item['items'] as $child" class="nav-item">
 												{var $childParams = $child['params'] ?? []}
 												{var $childPresenterDestination = isset($child['destination']) ? preg_replace('~:[^:]+$~', ':*', $child['destination']) : null}
@@ -53,8 +53,8 @@
 										</ul>
 									</div>
 								{else}
-									<div class="nav-link text-secondary fw-semibold">{$item['name']}</div>
-									<ul class="nav nav-pills flex-column ms-3 mb-2" aria-label="Podmenu {$item['name']}">
+									<div class="nav-link text-secondary">{$item['name']}</div>
+									<ul class="nav nav-pills flex-column ms-3" aria-label="Podmenu {$item['name']}">
 										<li n:foreach="$item['items'] as $child" class="nav-item">
 											{var $childParams = $child['params'] ?? []}
 											{var $childPresenterDestination = isset($child['destination']) ? preg_replace('~:[^:]+$~', ':*', $child['destination']) : null}
@@ -78,16 +78,28 @@
 					</ul>
 
 					<hr>
-					<div class="dropdown">
-						<a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="adminSidebarUser" data-bs-toggle="dropdown" aria-expanded="false">
-							<i class="fa-solid fa-user-circle fs-4 me-2" aria-hidden="true"></i>
-							{$currentUser->name ?? $currentUser->username ?? 'Správce'}
-						</a>
-						<ul class="dropdown-menu text-small shadow" aria-labelledby="adminSidebarUser">
-							<li><a class="dropdown-item" n:href=":AdminCore:Profile:default">Změna hesla</a></li>
-							<li><a class="dropdown-item text-danger" n:href=":AdminCore:Public:Sign:out">Odhlásit</a></li>
-						</ul>
-					</div>
+					{var $isUserProfileCurrent = $presenter->isLinkCurrent(':AdminCore:Profile:default')}
+					<ul class="nav nav-pills flex-column admin-sidebar-user" aria-label="Uživatelské menu">
+						<li class="nav-item">
+							<button type="button" class="nav-link w-100 border-0 bg-transparent text-start d-flex align-items-center justify-content-between {$isUserProfileCurrent ? 'is-open' : ''}" data-bs-toggle="collapse" data-bs-target="#adminSidebarUserMenu" aria-controls="adminSidebarUserMenu" aria-expanded="{$isUserProfileCurrent ? 'true' : 'false'}">
+								<span class="d-flex align-items-center">
+									<i class="fa-solid fa-user-circle fs-4 me-2" aria-hidden="true"></i>
+									{$currentUser->name ?? $currentUser->username ?? 'Správce'}
+								</span>
+								<i class="fa-solid fa-chevron-down small ms-2" aria-hidden="true"></i>
+							</button>
+							<div id="adminSidebarUserMenu" class="collapse {if $isUserProfileCurrent}show{/if}">
+								<ul class="nav nav-pills flex-column" aria-label="Podmenu uživatele">
+									<li class="nav-item">
+										<a class="nav-link py-1 {$isUserProfileCurrent ? 'active' : 'link-dark'}" n:href=":AdminCore:Profile:default" aria-current="{$isUserProfileCurrent ? 'page' : null}">Změna hesla</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link py-1 link-dark" n:href=":AdminCore:Public:Sign:out">Odhlásit</a>
+									</li>
+								</ul>
+							</div>
+						</li>
+					</ul>
 				</aside>
 
 				<main class="col-12 col-lg-9 col-xl-10 p-3 p-md-4 p-xl-5 py-xl-4 bg-white">

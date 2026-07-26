@@ -14,11 +14,98 @@
 	padding-right: 0;
 }
 
-.admin-sidebar .nav-pills .nav-link.active,
-.admin-sidebar .nav-pills .show > .nav-link {
-	background-color: #ccc;
-	font-weight: 500;
-	color: var(--bs-emphasis-color);
+body.admin {
+	--admin-accent-color: rgb(13, 110, 253);
+}
+
+.admin-sidebar {
+	--admin-sidebar-bg: #454545;
+	--admin-sidebar-bg-active: #303030;
+	--admin-sidebar-border: rgba(255, 255, 255, .07);
+	--admin-sidebar-text: #d8dde3;
+	--admin-sidebar-text-muted: #c4cbd2;
+	--admin-sidebar-text-active: #fff;
+	--admin-sidebar-link-bg-hover: rgba(255, 255, 255, .05);
+	--admin-sidebar-link-padding-x: 18px;
+	--admin-sidebar-link-padding-y: 5px;
+	--admin-sidebar-link-min-height: 45px;
+
+	background: var(--admin-sidebar-bg);
+	color: var(--admin-sidebar-text);
+}
+
+.admin-sidebar a,
+.admin-sidebar .nav-link,
+.admin-sidebar .link-dark,
+.admin-sidebar .link-secondary,
+.admin-sidebar .text-secondary {
+	color: var(--admin-sidebar-text) !important;
+}
+
+.admin-sidebar-brand {
+	min-height: 42px;
+	padding: 10px 18px;
+	color: var(--admin-sidebar-text) !important;
+}
+
+.admin-sidebar hr {
+	margin: 0;
+	border-color: var(--admin-sidebar-border);
+	opacity: 1;
+}
+
+.admin-sidebar .nav {
+	--bs-nav-link-padding-x: var(--admin-sidebar-link-padding-x);
+	--bs-nav-link-padding-y: var(--admin-sidebar-link-padding-y);
+}
+
+.admin-sidebar .nav-pills .nav-link {
+	display: flex;
+	align-items: center;
+	min-height: var(--admin-sidebar-link-min-height);
+	padding: var(--admin-sidebar-link-padding-y) var(--admin-sidebar-link-padding-x) !important;
+	position: relative;
+	border-radius: 0;
+	border: 0;
+	border-bottom: 1px solid var(--admin-sidebar-border) !important;
+	color: var(--admin-sidebar-text) !important;
+	font-weight: 400;
+}
+
+.admin-sidebar .nav-pills .nav-link:hover,
+.admin-sidebar .nav-pills .nav-link:focus-visible {
+	background-color: var(--admin-sidebar-link-bg-hover) !important;
+	color: var(--admin-sidebar-text-active) !important;
+}
+
+.admin-sidebar .nav-pills .nav-link.active {
+	background-color: var(--admin-sidebar-bg-active) !important;
+	color: var(--admin-sidebar-text-active) !important;
+	
+}
+
+.admin-sidebar .nav-pills .nav-link.active::before {
+	position: absolute;
+	inset: 0 auto 0 0;
+	width: 5px;
+	content: '';
+	background: var(--admin-accent-color);
+}
+
+.admin-sidebar .nav-pills .nav-link.is-open {
+	color: var(--admin-sidebar-text-active) !important;
+}
+
+.admin-sidebar .nav-pills .nav .nav-link {
+	padding-left: 36px !important;
+}
+
+.admin-sidebar .nav-pills .nav {
+	margin-left: 0 !important;
+}
+
+.admin-sidebar-user .fa-user-circle {
+	color: var(--admin-sidebar-text-muted);
 }
 
 @media (min-width: 992px) {
