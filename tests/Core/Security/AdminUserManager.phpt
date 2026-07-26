@@ -44,7 +44,7 @@ test('createUser stores normalized values and resets security fields', function 
 	try {
 		Assert::same('tester.user', $user->username);
 		Assert::same('Tester Name', $user->name);
-		Assert::same('superadmin', $user->role);
+		Assert::same($manager->getDefaultRole(), $user->role);
 		Assert::same(0, $user->failedCount);
 		Assert::null($user->blockedUntil);
 		Assert::null($user->lastAttemptAt);
