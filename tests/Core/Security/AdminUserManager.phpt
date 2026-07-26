@@ -12,7 +12,7 @@ test('assertStrongPassword throws for weak password', function () use ($manager)
 	Assert::exception(
 		static fn() => $manager->assertStrongPassword('short123'),
 		RuntimeException::class,
-		'Password must be at least 10 characters long.',
+		'Heslo musí mít alespoň 10 znaků.',
 	);
 });
 
@@ -29,7 +29,7 @@ test('createUser throws on duplicate username when force is false', function () 
 		Assert::exception(
 			static fn() => $manager->createUser($user->username, 'Second User', 'AnotherStrongPassword123', false),
 			RuntimeException::class,
-			'Admin user with this username already exists.',
+			'Uživatel s tímto uživatelským jménem už existuje.',
 		);
 	} finally {
 		cleanupAdminUser($user);
