@@ -37,6 +37,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	// Initialize Naja (nette ajax)
 	naja.formsHandler.netteForms = netteForms;
+	// Redirect targets like error pages render full HTML, so enforce browser navigation.
+	naja.redirectHandler.addEventListener('redirect', (event) => {
+		event.detail.setHardRedirect(true);
+	});
 	naja.initialize();
 
 	// Initialize datagrids

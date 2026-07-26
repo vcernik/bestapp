@@ -9,6 +9,7 @@ use Nextras\Orm\Entity\Entity;
  * @property int $id {primary}
  * @property string $username
  * @property string $name
+ * @property string $role {default superadmin}
  * @property bool $enabled {default true}
  * @property string $passwordHash
  * @property int $failedCount {default 0}

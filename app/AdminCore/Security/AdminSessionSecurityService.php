@@ -43,9 +43,10 @@ final class AdminSessionSecurityService
 
 	private function createIdentity(AdminUser $adminUser): SimpleIdentity
 	{
-		return new SimpleIdentity($adminUser->id, ['admin'], [
+		return new SimpleIdentity($adminUser->id, [$adminUser->role], [
 			'username' => $adminUser->username,
 			'name' => $adminUser->name,
+			'role' => $adminUser->role,
 			'updatedAt' => $adminUser->updatedAt->getTimestamp(),
 		]);
 	}

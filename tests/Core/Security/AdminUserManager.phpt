@@ -44,6 +44,7 @@ test('createUser stores normalized values and resets security fields', function 
 	try {
 		Assert::same('tester.user', $user->username);
 		Assert::same('Tester Name', $user->name);
+		Assert::same('superadmin', $user->role);
 		Assert::same(0, $user->failedCount);
 		Assert::null($user->blockedUntil);
 		Assert::null($user->lastAttemptAt);
@@ -51,4 +52,13 @@ test('createUser stores normalized values and resets security fields', function 
 	} finally {
 		cleanupAdminUser($user);
 	}
+});
+
+
+test('createUser throws for unsupported role', function () use ($manager): void {
+	Assert::exception(
+		static fn() => $manager->createUser(generateTestUsername(), 'Role Test', 'veryStrongPassword123', true, 'unknown-role'),
+		RuntimeException::class,
+		'Unsupported admin role "unknown-role".',
+	);
 });

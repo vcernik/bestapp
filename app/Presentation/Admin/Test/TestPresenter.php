@@ -25,7 +25,13 @@ final class TestPresenter extends BasePrivatePresenter
 
 	protected function createComponentArticlesGrid(): Datagrid
 	{
-		$grid = $this->datagridFactory->createSortable('sortOrder', 'ASC');
+		$grid = $this->datagridFactory->create();
+
+		$grid->setDefaultSort(['sortOrder' => 'ASC']);
+		if ($this->getUser()->isAllowed('Admin:Test', 'sort')) {
+			$grid->setSortable();
+		}
+		
 
 		$grid->setDataSource($this->articleRepository->findAll());
 

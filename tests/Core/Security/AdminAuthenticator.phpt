@@ -82,8 +82,9 @@ test('authenticate succeeds and resets security counters', function () use ($aut
 		$identity = $authenticator->authenticate($user->username, 'correct-password-12345');
 
 		Assert::same($user->id, $identity->getId());
-		Assert::same(['admin'], $identity->getRoles());
+		Assert::same([$user->role], $identity->getRoles());
 		Assert::same($user->username, $identity->getData()['username']);
+		Assert::same($user->role, $identity->getData()['role']);
 		Assert::type('int', $identity->getData()['updatedAt']);
 
 		$finalUser = testAdminOrm()->adminUsers->getById($user->id);

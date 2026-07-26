@@ -1,0 +1,6 @@
+{block content}
+	<p n:if="$user->isAllowed('AdminCore:Users', 'create')">
+		<a n:href="create" class="btn btn-primary mb-3">Nový uživatel</a>
+	</p>
+	{control usersGrid}
+{/block}

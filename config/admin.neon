@@ -1,13 +1,57 @@
 parameters:
 	admin:
 		appName: Bestapp Admin
+		acl:
+			roles:
+				- superadmin
+				- editor
+				- tester
+			resources:
+				- Admin:Home
+				- Admin:Test
+				- Admin:Test2
+				- AdminCore:Profile
+				- AdminCore:Users
+			allow:
+				superadmin:
+					- resource: '*'
+						privileges: ['*']
+				editor:
+					- resource: Admin:Home
+						privileges: [default]
+					- resource: Admin:Test
+						privileges: [default]
+					- resource: Admin:Test2
+						privileges: [default]
+					- resource: AdminCore:Profile
+						privileges: [default]
+				tester:
+					- resource: Admin:Home
+						privileges: [default]
 		menu:
 			- name: Přehled
 				link: ':Admin:Home:default'
+				permission:
+					resource: Admin:Home
+					privilege: default
 			- name: Správa obsahu
 				collapsible: true
 				items:
 					- name: Články
 						link: ':Admin:Test:default'
+						permission:
+							resource: Admin:Test
+							privilege: default
 					- name: Kategorie
 						link: ':Admin:Test2:default'
+						permission:
+							resource: Admin:Test2
+							privilege: default
+			- name: AdminCore
+				collapsible: true
+				items:
+					- name: Uživatelé
+						link: ':AdminCore:Users:default'
+						permission:
+							resource: AdminCore:Users
+							privilege: default

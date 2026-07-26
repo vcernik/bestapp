@@ -26,9 +26,10 @@ function loginAsAdminIdentity(User $user, AdminUser $adminUser, ?int $updatedAt 
 	prepareAdminNamespace($user);
 	$user->logout(true);
 
-	$user->login(new SimpleIdentity($adminUser->id, ['admin'], [
+	$user->login(new SimpleIdentity($adminUser->id, [$adminUser->role], [
 		'username' => $adminUser->username,
 		'name' => $adminUser->name,
+		'role' => $adminUser->role,
 		'updatedAt' => $updatedAt ?? $adminUser->updatedAt->getTimestamp(),
 	]));
 }

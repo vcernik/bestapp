@@ -1,6 +1,8 @@
 services:
 	- App\Core\RouterFactory::createRouter
 	- App\AdminCore\Presentation\Accessory\AdminMenuProvider(%admin.appName%, %admin.menu%)
+	- App\AdminCore\Security\AdminAuthorizator(%admin.acl.roles%, %admin.acl.resources%, %admin.acl.allow%)
+	- App\AdminCore\Security\AdminUserManager(availableRoles: %admin.acl.roles%)
 
 
 search:

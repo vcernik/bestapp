@@ -59,9 +59,10 @@ final class AdminAuthenticator implements Authenticator
 		$this->orm->persistAndFlush($user);
 		$this->adminActivityLogger->log($user->id, 'auth.login.success', []);
 
-		return new SimpleIdentity($user->id, ['admin'], [
+		return new SimpleIdentity($user->id, [$user->role], [
 			'username' => $user->username,
 			'name' => $user->name,
+			'role' => $user->role,
 			'updatedAt' => $user->updatedAt->getTimestamp(),
 		]);
 	}

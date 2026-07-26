@@ -1,0 +1,6 @@
+{block content}
+	<div class="alert alert-danger border-2 shadow-sm" role="alert">
+		<p class="mb-2">{if $errorMessage !== ''}{$errorMessage}{else}Požadovaný obsah nelze zobrazit.{/if}</p>
+		<p class="mb-0 small text-body-secondary">Použijte navigaci administrace a nebo se vraťte <a href="javascript:history.back()">zpět</a>.</p>
+	</div>
+{/block}

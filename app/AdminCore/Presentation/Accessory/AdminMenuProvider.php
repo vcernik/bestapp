@@ -3,34 +3,40 @@
 namespace App\AdminCore\Presentation\Accessory;
 
 use InvalidArgumentException;
+use Nette\Security\User;
 
 /**
- * @phpstan-type AdminMenuChild array{name: string, destination?: string, params?: array<string, scalar|null>, items?: list<mixed>, collapsible?: bool}
- * @phpstan-type AdminMenuItem array{name: string, destination?: string, params?: array<string, scalar|null>, items?: list<AdminMenuChild>, collapsible?: bool}
+ * @phpstan-type AdminPermission array{resource: string, privilege: string}
+ * @phpstan-type AdminMenuChild array{name: string, destination?: string, params?: array<string, scalar|null>, permission?: AdminPermission, items?: list<mixed>, collapsible?: bool}
+ * @phpstan-type AdminMenuItem array{name: string, destination?: string, params?: array<string, scalar|null>, permission?: AdminPermission, items?: list<AdminMenuChild>, collapsible?: bool}
  */
 final class AdminMenuProvider
 {
 	/** @var list<AdminMenuItem> */
 	private array $items;
 
+	/** @var array<string, AdminPermission> */
+	private array $permissionByDestination = [];
+
 	private readonly string $appName;
 
 	/**
-	 * @param array<int, array{name?: mixed, link?: mixed, items?: mixed, collapsible?: mixed}> $items
+	 * @param array<int, array{name?: mixed, link?: mixed, permission?: mixed, items?: mixed, collapsible?: mixed}> $items
 	 */
-	public function __construct(string $appName, array $items)
+	public function __construct(string $appName, array $items, private readonly User $user)
 	{
 		$this->appName = $appName;
 		$this->items = array_values(array_map(
 			fn (array $item): array => $this->normalizeItem($item),
 			$items,
 		));
+		$this->permissionByDestination = $this->buildPermissionMap($this->items);
 	}
 
 	/** @return list<AdminMenuItem> */
 	public function getItems(): array
 	{
-		return $this->items;
+		return $this->filterItems($this->items);
 	}
 
 	public function getAppName(): string
@@ -39,7 +45,16 @@ final class AdminMenuProvider
 	}
 
 	/**
-	 * @param array{name?: mixed, link?: mixed, items?: mixed, collapsible?: mixed} $item
+	 * @return AdminPermission|null
+	 */
+	public function resolvePermissionForPresenterAction(string $presenterName, string $action): ?array
+	{
+		$key = $this->normalizeDestinationKey(':' . $presenterName . ':' . $action);
+		return $this->permissionByDestination[$key] ?? null;
+	}
+
+	/**
+	 * @param array{name?: mixed, link?: mixed, permission?: mixed, items?: mixed, collapsible?: mixed} $item
 	 * @return AdminMenuItem
 	 */
 	private function normalizeItem(array $item): array
@@ -56,6 +71,14 @@ final class AdminMenuProvider
 			[$destination, $params] = $this->normalizeLink($name, $item['link']);
 			$result['destination'] = $destination;
 			$result['params'] = $params;
+			$inferredPermission = $this->permissionFromDestination($destination);
+			if ($inferredPermission !== null) {
+				$result['permission'] = $inferredPermission;
+			}
+		}
+
+		if (array_key_exists('permission', $item)) {
+			$result['permission'] = $this->normalizePermission($name, $item['permission']);
 		}
 
 		if (array_key_exists('items', $item)) {
@@ -85,6 +108,33 @@ final class AdminMenuProvider
 		}
 
 		return $result;
+	}
+
+	/**
+	 * @param mixed $permission
+	 * @return AdminPermission
+	 */
+	private function normalizePermission(string $name, mixed $permission): array
+	{
+		if (!is_array($permission)) {
+			throw new InvalidArgumentException(sprintf('Admin menu item "%s" must define "permission" as array.', $name));
+		}
+
+		$resource = $permission['resource'] ?? null;
+		$privilege = $permission['privilege'] ?? null;
+
+		if (!is_string($resource) || trim($resource) === '') {
+			throw new InvalidArgumentException(sprintf('Admin menu item "%s" has invalid permission.resource.', $name));
+		}
+
+		if (!is_string($privilege) || trim($privilege) === '') {
+			throw new InvalidArgumentException(sprintf('Admin menu item "%s" has invalid permission.privilege.', $name));
+		}
+
+		return [
+			'resource' => trim($resource),
+			'privilege' => trim($privilege),
+		];
 	}
 
 	/**
@@ -136,5 +186,106 @@ final class AdminMenuProvider
 		}
 
 		return $this->normalizeItem($child);
+	}
+
+	/**
+	 * @param list<AdminMenuItem> $items
+	 * @return list<AdminMenuItem>
+	 */
+	private function filterItems(array $items): array
+	{
+		$filtered = [];
+		foreach ($items as $item) {
+			$children = $item['items'] ?? null;
+			if (is_array($children)) {
+				$item['items'] = $this->filterItems($children);
+			}
+
+			$hasChildren = isset($item['items']) && $item['items'] !== [];
+			$hasDestination = isset($item['destination']);
+
+			if ($hasDestination && isset($item['permission']) && !$this->isAllowed($item['permission'])) {
+				if (!$hasChildren) {
+					continue;
+				}
+				unset($item['destination'], $item['params']);
+			}
+
+			if (!$hasDestination && !$hasChildren) {
+				continue;
+			}
+
+			$filtered[] = $item;
+		}
+
+		return $filtered;
+	}
+
+	/**
+	 * @param list<AdminMenuItem> $items
+	 * @return array<string, AdminPermission>
+	 */
+	private function buildPermissionMap(array $items): array
+	{
+		$map = [];
+		foreach ($items as $item) {
+			if (isset($item['destination'], $item['permission'])) {
+				$map[$this->normalizeDestinationKey($item['destination'])] = $item['permission'];
+			}
+
+			if (isset($item['items'])) {
+				$map += $this->buildPermissionMap($item['items']);
+			}
+		}
+
+		return $map;
+	}
+
+	/**
+	 * @return AdminPermission|null
+	 */
+	private function permissionFromDestination(string $destination): ?array
+	{
+		$normalized = ltrim(trim($destination), ':');
+		if ($normalized === '') {
+			return null;
+		}
+
+		$parts = explode(':', $normalized);
+		if (count($parts) < 2) {
+			return null;
+		}
+
+		$privilege = array_pop($parts);
+		if ($privilege === '') {
+			return null;
+		}
+
+		$resource = implode(':', $parts);
+		if ($resource === '') {
+			return null;
+		}
+
+		return [
+			'resource' => $resource,
+			'privilege' => $privilege,
+		];
+	}
+
+	/**
+	 * @param AdminPermission $permission
+	 */
+	private function isAllowed(array $permission): bool
+	{
+		try {
+			return $this->user->isAllowed($permission['resource'], $permission['privilege']);
+		} catch (\Throwable) {
+			return false;
+		}
+	}
+
+	private function normalizeDestinationKey(string $destination): string
+	{
+		return mb_strtolower(trim($destination));
 	}
 }

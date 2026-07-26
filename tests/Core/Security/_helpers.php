@@ -15,10 +15,11 @@ function createTestAdminUser(
 	string $password = 'veryStrongPassword123',
 	string $name = 'Test Admin',
 	bool $enabled = true,
+	?string $role = null,
 ): AdminUser
 {
 	$manager = testContainer()->getByType(AdminUserManager::class);
-	$user = $manager->createUser($username ?? generateTestUsername(), $name, $password, true);
+	$user = $manager->createUser($username ?? generateTestUsername(), $name, $password, true, $role ?? $manager->getDefaultRole());
 	if (!$enabled) {
 		$user->enabled = false;
 		testAdminOrm()->persistAndFlush($user);

@@ -44,6 +44,22 @@ abstract class BasePrivatePresenter extends Nette\Application\UI\Presenter
 			$this->redirect(':AdminCore:Public:Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 
+		$permission = $this->resolveCurrentPermission();
+		if (!$this->getUser()->isAllowed($permission['resource'], $permission['privilege'])) {
+			$this->logAdminActivity('auth.authorization.denied', [
+				'resource' => $permission['resource'],
+				'privilege' => $permission['privilege'],
+				'presenter' => $this->getName(),
+				'action' => $this->getAction(),
+				'signal' => $this->getSignal(),
+			]);
+
+			$this->redirect(':AdminCore:Error4xx:default', [
+				'code' => 403,
+				'message' => 'Nemáte oprávnění pro zobrazení této stránky nebo provedení této akce.',
+			]);
+		}
+
 		$this->breadcrumbs = [];
 		$this->addBreadcrumb('Administrace', ':Admin:Home:default');
 	}
@@ -64,6 +80,7 @@ abstract class BasePrivatePresenter extends Nette\Application\UI\Presenter
 			'link' => $link,
 		];
 
+		$this->template->breadcrumbs = $this->breadcrumbs;
 		$this->template->pageTitle = $title;
 	}
 
@@ -82,5 +99,42 @@ abstract class BasePrivatePresenter extends Nette\Application\UI\Presenter
 	public function formatLayoutTemplateFiles(): array
 	{
 		return [__DIR__ . '/../@layout.private.latte'];
+	}
+
+	/**
+	 * @return array{resource: string, privilege: string}
+	 */
+	private function resolveCurrentPermission(): array
+	{
+		$signal = $this->getSignal();
+		if ($signal !== null) {
+			$presenterName = $this->getName() ?? '';
+			if ($presenterName === '') {
+				throw new Nette\InvalidStateException('Presenter name is not available.');
+			}
+
+			[, $signalName] = $signal;
+
+			return [
+				'resource' => $presenterName,
+				'privilege' => $signalName,
+			];
+		}
+
+		$presenterName = $this->getName() ?? '';
+		if ($presenterName === '') {
+			throw new Nette\InvalidStateException('Presenter name is not available.');
+		}
+
+		$action = $this->getAction();
+		$mappedPermission = $this->adminMenuProvider->resolvePermissionForPresenterAction($presenterName, $action);
+		if ($mappedPermission !== null) {
+			return $mappedPermission;
+		}
+
+		return [
+			'resource' => $presenterName,
+			'privilege' => $action,
+		];
 	}
 }
